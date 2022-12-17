@@ -1,11 +1,12 @@
 <template>
+  <h1>Главное меню</h1>
   <div class="menu">
     <button class="menu-item" @click="isVisible=!isVisible">
       Рейтинговый матч
     </button>
     <div class="panel" v-if="isVisible">
       <SelectVariant />
-      <button @click="show = !show">
+      <button style="font-size: 20px; line-height: 24px" @click="show = !show">
           <span v-show="!show">Начать поиск</span>
           <span v-show="show">Остановить поиск </span>
       </button> 
@@ -24,11 +25,10 @@
     </button>
     <div class="panel" v-if="isVisible2">
       <SelectVariant />
-      <button>
+      <button style="font-size: 20px; line-height: 24px">
           Начать игру          
       </button> 
-    </div>
-    
+    </div>    
     <div class="nickname">
       Никнейм
       <SettingsButton />
@@ -59,7 +59,9 @@ style.<style lang="scss" scoped>
   .menu {
     width: 500px;
     height: 700px;
+    position: relative;
     display: flex;
+    margin-top: 0;
     flex-direction: column;
     background: #FFFFFF;
     border: 1px solid #E0E0E0;
@@ -98,12 +100,12 @@ style.<style lang="scss" scoped>
     border-bottom: 1px solid #E0E0E0;
   }
   .nickname {
-    width: 500px;
-    
-    position: fixed;
-    bottom: 0;
+    width: 500px; 
+    height: 75px;   
+    position: absolute;
+    bottom: 0;       
     border-top: 1px solid #E0E0E0;
-    padding: 0px 15px;
+    padding: 15px;
     font-weight: 400;
     font-size: 20px;
     line-height: 24px;

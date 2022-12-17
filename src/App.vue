@@ -3,11 +3,17 @@
   <router-view/>
 </template>
 
-<style>
-  body {
+<style lang="scss">
+  #app {
     font-family: Helvetica,  Arial, sans-serif;
-    color: #000;
+    color: #000000;
     background-color: #fafafa;
-    min-height: 100%;
+    min-height: 100%;    
+  }
+  h1 {
+    color: #000000;
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 44px;    
   }
 </style>

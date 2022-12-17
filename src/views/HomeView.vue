@@ -1,13 +1,13 @@
 <template>
   <div class="row">
-    <div class="col">      
-      <h1>Главное меню</h1>
+    <div class="col-1">      
+      
       <ListMenu />
     </div>
-    <div class="col">     
-      <h1>Друзья</h1>
+    <div class="col-2">     
+      
       <Friends />
-      <h1>Уведомления</h1>
+      
       <Notifications />
     </div>
   </div>
@@ -27,12 +27,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .row {
     display: flex;
+    padding-top: 100px;
   }
-
-  .col {
-      flex: 50%;
+  .col-1 {
+    margin-left: 400px;
+  }
+  .col-2 {      
+    margin-left: 120px;
   }
 </style>
