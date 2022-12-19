@@ -3,18 +3,18 @@
     <h1 style="text-align:center">Вход в учетную запись</h1>
     <div class="container">
       <div class="input-container">
-        <i class="icon"></i>
+        <i class="usericon"></i>
         <input type="text" placeholder="Имя пользователя" name="uname" required>
       </div> 
       <div class="input-container">
-        <i class="pass icon"></i>   
+        <i class="passicon"></i>   
         <input type="password" placeholder="Пароль" name="psw" required>
         <button class="show"></button>
       </div>
       <div class="btn-group">
-        <button class="settings"><i><setting-filled/></i></button>
-        <button>Забыли пароль?</button>
-        <button>Регистрация</button>
+        <button class="settings"><i class="settingsicon"></i></button>
+        <button class="forgot">Забыли пароль?</button>
+        <button class="registration">Регистрация</button>
         <button class="login" type="submit">Вход</button>
       </div>    
     </div>
@@ -22,12 +22,11 @@
 </template>
 
 <script>
-  import { defineComponent } from 'vue';
-  import { SettingFilled} from '@ant-design/icons-vue';
+  import { defineComponent } from 'vue';  
 
   export default defineComponent({    
     components: {
-        SettingFilled
+        
     },  
   });
 </script>
@@ -61,42 +60,42 @@
     border: 1px solid #e0e0e0;
     border-left: none;
   }
-  .icon {
+  .input-container i {
     width: 45px;
     height: 45px;
+    padding: 0 15px;
     border: 1px solid #e0e0e0;
     border-right: none;
     border-radius: 11px 0px 0px 11px;
-    background: url(/public/img/icons/avatar-default-symbolic.symbolic.png) no-repeat;
   }
-  .pass {
-    background: url(/public/img/icons/dialog-password-symbolic.symbolic.png) no-repeat;
+  .usericon {
+    background: url(/public/img/icons/avatar-default-symbolic.symbolic.png) no-repeat center;
+    background-size: 30px;
+  }
+  .passicon {
+    background: url(/public/img/icons/dialog-password-symbolic.symbolic.png) no-repeat center;
+    background-size: 30px;
   }
   input {
     height: 45px;
     width: 100%;
     padding: 15px;        
     display: inline-block;
-    border: 1px solid #e0e0e0;    
+    border: 1px solid #e0e0e0; 
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;   
   }
   input[type="text"] {
     border-radius: 0px 11px 11px 0px;
   }
   .btn-group {
-    padding: 15px;
-  }
-  .settings {
-    border-radius: 11px 0px 0px 11px;
-    width: 45px;
-  }
-  .login {
-    border-radius: 0px 11px 11px 0px;
-  }
+    padding: 15px 0;
+    width: 100%; 
+  }  
   .btn-group button {        
-    height: 45px;
-    width: fit-content;
-    background-color: #e6e6e6;        
-    padding: 0 15px;
+    height: 45px;    
+    background-color: #e6e6e6;      
     font-weight: 400;
     font-size: 20px;
     line-height: 24px;       
@@ -108,5 +107,20 @@
   }
   button:hover {
     background-color: #bebebe;
+  }
+  .settings {
+    border-radius: 11px 0px 0px 11px;    
+    width: 45px;        
+    background: url(/public/img/icons/applications-system-symbolic.symbolic.png) no-repeat center/25px;
+  }
+  .forgot {
+    width: 183px;
+  }
+  .registration {
+    width: 148px;
+  }
+  .login {
+    width: 94px;
+    border-radius: 0px 11px 11px 0px;
   }
 </style>

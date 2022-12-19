@@ -5,7 +5,7 @@
 
 <style lang="scss">
   #app {
-    font-family: Helvetica,  Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     color: #000000;
     background-color: #fafafa;
     min-height: 100%;    

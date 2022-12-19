@@ -2,8 +2,8 @@
     <div class="page">
     <h1 style="text-align:center">Регистрация</h1>    
     <div class="container">
-      <button class="back" @click="href">
-        <i class="backicon"></i>
+      <button class="back" @click="document.location='/login'">
+        <div class="backicon"></div> 
         Вернуться к окну входа
       </button>
       <div class="input-container">
@@ -29,19 +29,20 @@
         <input type="password" placeholder="Ответ на контрольный вопрос" name="answer" required>
         <button class="show"></button>
       </div>      
-      <button class="settings"><i><setting-filled/></i></button>
+      <button class="settings"><i></i></button>
                 
       <button class="registration" type="submit">Зарегистрироваться</button>        
     </div>
   </div>
 </template>
+
 <script>
   import { defineComponent } from 'vue';
-  import { SettingFilled} from '@ant-design/icons-vue';
+ 
 
   export default defineComponent({    
     components: {
-        SettingFilled
+        
     },  
   });
 </script>
@@ -78,20 +79,30 @@
   .icon {
     width: 45px;
     height: 45px;
+    padding: 15px;
     border: 1px solid #e0e0e0;
     border-right: none;
     border-radius: 11px 0px 0px 11px;
-    background: url(/public/img/icons/avatar-default-symbolic.symbolic.png) no-repeat;
+    background: url(/public/img/icons/avatar-default-symbolic.symbolic.png) no-repeat center/30px;
   }
   .pass {
-    background: url(/public/img/icons/dialog-password-symbolic.symbolic.png) no-repeat;
+    background: url(/public/img/icons/channel-secure-symbolic.symbolic.png) no-repeat center/30px;
+  }
+  .quest {
+    background: url(/public/img/icons/help-faq-symbolic.symbolic.png) no-repeat center/30px;
+  }
+  .answ {
+    background: url(/public/img/icons/user-away-symbolic.symbolic.png) no-repeat center/30px;    
   }
   input {
     height: 45px;
     width: 100%;
     padding: 15px;        
     display: inline-block;
-    border: 1px solid #e0e0e0;    
+    border: 1px solid #e0e0e0; 
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;   
   }
   input[type="text"] {
     border-radius: 0px 11px 11px 0px;
@@ -111,29 +122,39 @@
     margin: 15px;
     border-radius: 50%;
     width: 45px;
+    background: url(/public/img/icons/applications-system-symbolic.symbolic.png) no-repeat center/25px;
+    background-color: #E0E0E0;
+    
   }
   .registration {
     float: right;
     margin: 15px;
     border-radius: 11px;
-  }
+  }  
+  button:hover {
+    background-color: #bebebe;
+  }  
   .back {
     height: 75px;
-    width: 100%;
-    text-align: start;
+    width: 100%;    
+    text-align: left;
+    display: flex;
+    align-items: center;
     background-color: #FFFFFF;
     border-radius: 11px 11px 0px 0px;
     border: none;
     border-bottom: 1px solid #E0E0E0;
   }
-  button:hover {
-    background-color: #bebebe;
+  .back:hover {
+    background-color: #e6e6e6;
   }
   .backicon {
+    float: left;
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    background: url(/public/img/icons/go-home-symbolic.symbolic.png) no-repeat;
-    background-color: #e6e6e6;
+    background: url(/public/img/icons/go-home-symbolic.symbolic.png) no-repeat center/30px;
+    background-color: #e6e6e6; 
+    margin-right: 12px;
   }
 </style>

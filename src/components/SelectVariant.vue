@@ -3,7 +3,10 @@
     <a-select
       v-model:value="value"
       label-in-value
-      style="width: 100%"
+      style="width: 100%;
+      font-weight: 400;    
+      font-size: 20px; 
+      line-height: 24px;"
       :options="options"
       @change="handleChange"
     ></a-select>

@@ -1,7 +1,6 @@
 <template>
     <a-dropdown :trigger="['click']" placement="topRight">
-      <button>
-        <i><setting-filled/></i>
+      <button>        
       </button>
       <template #overlay>
         <a-menu>
@@ -20,9 +19,8 @@
 </template>
 
 <script>
-    import { defineComponent } from 'vue';
-    import { SettingFilled} from '@ant-design/icons-vue';
-
+  import { defineComponent } from 'vue';
+    
 export default defineComponent({
   data: () => ({
     isVisible: false,
@@ -30,7 +28,7 @@ export default defineComponent({
     show: false,
   }),
   components: {
-    SettingFilled
+    
   },  
 });
 </script>
@@ -41,7 +39,9 @@ export default defineComponent({
         width: 45px;
         height: 45px;
         border-radius: 50%;
-        border: none;
+        border: none;        
+        background: url(/public/img/icons/applications-system-symbolic.symbolic.png) no-repeat center/25px;
+        background-color: #e6e6e6;
     }
     button:hover {
         background-color: #bebebe;
