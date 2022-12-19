@@ -1,14 +1,16 @@
 <template>
   <div class="row">
-    <div class="col">      
-      <h1>Главное меню</h1>
+    <div class="col-1">      
+      
       <ListMenu />
     </div>
-    <div class="col">     
-      <h1>Друзья</h1>
+    <div class="col-2">     
+      
       <Friends />
-      <h1>Уведомления</h1>
+      
       <Notifications />
+
+      <FindFriend />
     </div>
   </div>
 </template>
@@ -17,22 +19,31 @@
 import ListMenu from '@/components/ListMenu'
 import Friends from '@/components/Friends.vue';
 import Notifications from '@/components/Notifications.vue';
+import FindFriend from '@/components/FindFriend.vue';
 
 export default {
   name: 'HomeView',
   components: {
-    ListMenu, Friends, Notifications
+    ListMenu, Friends, Notifications, FindFriend
   }
   
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .row {
+    width: 1120px;
+    margin-left: 400px;
+    margin-right: 400px;
     display: flex;
+    padding-top: 100px;
   }
-
-  .col {
-      flex: 50%;
+  .col-1 {
+    flex: 50%;
+    padding-right: 60px;
+  }
+  .col-2 {      
+    flex: 50%;
+    margin-left: 60px;
   }
 </style>

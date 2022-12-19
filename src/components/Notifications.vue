@@ -1,4 +1,5 @@
 <template>
+    <h1>Уведомления</h1>
     <div class="notify">
 
     </div>

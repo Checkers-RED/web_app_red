@@ -1,6 +1,8 @@
 <template>
+  <h1>Главное меню</h1>
   <div class="menu">
     <button class="menu-item" @click="isVisible=!isVisible">
+      <div class="match"></div>
       Рейтинговый матч
     </button>
     <div class="panel" v-if="isVisible">
@@ -12,23 +14,27 @@
       <span v-if="show"><sync-outlined spin/></span>
     </div>
     <button class="menu-item" @click="href='#'">
+      <div class="tournament"></div>
       Присоединиться к турниру
     </button>
     
     <button class="menu-item" @click="href='#'">
+      <div class="create"></div>
       Создать пользовательский турнир
     </button>
     
     <button class="menu-item" @click="isVisible2=!isVisible2">
+      <div class="bot"></div>
       Игра с ботом
     </button>
     <div class="panel" v-if="isVisible2">
       <SelectVariant />
-      <button>
+      <p>Время на ход (секунды)</p>
+      <input type="number" name="time" min="10" max="60" step="5" value="30">
+      <button style="float: right">
           Начать игру          
       </button> 
-    </div>
-    
+    </div>    
     <div class="nickname">
       Никнейм
       <SettingsButton />
@@ -59,7 +65,9 @@ style.<style lang="scss" scoped>
   .menu {
     width: 500px;
     height: 700px;
+    position: relative;
     display: flex;
+    margin-top: 0;
     flex-direction: column;
     background: #FFFFFF;
     border: 1px solid #E0E0E0;
@@ -69,6 +77,8 @@ style.<style lang="scss" scoped>
   .menu-item {
     width: 100%;
     height: 75px;
+    display: flex;
+    align-items: center;
     background: #FFFFFF;
     border: none;
     border-bottom: 1px solid #E0E0E0;
@@ -81,9 +91,29 @@ style.<style lang="scss" scoped>
   }
   .menu-item:hover {
     background-color: #e6e6e6;
-  }
+  }  
   .menu-item:first-child {
     border-radius: 11px 11px 0px 0px;
+  }
+  .menu-item div {
+    float: left;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;    
+    background-color: #e6e6e6; 
+    margin-right: 12px;
+  }
+  .match {
+    background: url(/public/img/icons/attack.png) no-repeat center/30px;
+  }
+  .tournament {
+    background: url(/public/img/icons/attack.png) no-repeat center/30px;
+  }
+  .create {
+    background: url(/public/img/icons/schedule.png) no-repeat center/30px;
+  }
+  .bot {
+    background: url(/public/img/icons/preferences-desktop-display-symbolic.symbolic.png) no-repeat center/30px;
   }
   .panel button {
     height: 45px;
@@ -92,18 +122,38 @@ style.<style lang="scss" scoped>
     border-radius: 11px;
     margin: 20px 20px 0px 0px;
     padding: 0px 15px;
+    font-size: 20px; 
+    line-height: 24px
+  }
+  .panel button:hover {
+    background-color: #bebebe;
   }
   .panel {
     padding: 15px;
     border-bottom: 1px solid #E0E0E0;
   }
+  .panel p {
+    padding-top: 24px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+  }
+  .panel input {
+    height: 45px;
+    width: 60px;
+    text-align: center;
+    border: 1px solid #E0E0E0;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+  }
   .nickname {
-    width: 500px;
-    
-    position: fixed;
-    bottom: 0;
+    width: 500px; 
+    height: 75px;   
+    position: absolute;
+    bottom: 0;       
     border-top: 1px solid #E0E0E0;
-    padding: 0px 15px;
+    padding: 15px;
     font-weight: 400;
     font-size: 20px;
     line-height: 24px;
