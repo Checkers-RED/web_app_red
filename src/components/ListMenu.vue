@@ -1,17 +1,17 @@
 <template>
   <h1>Главное меню</h1>
   <div class="menu">
-    <button class="menu-item" @click="isVisible=!isVisible">
+    <button class="menu-item" @click="isVisible=!isVisible; isVisible2=false">
       <div class="match"></div>
       Рейтинговый матч
     </button>
-    <div class="panel" v-if="isVisible">
+    <div class="panel" v-show="isVisible">
       <SelectVariant />
       <button @click="show = !show">
           <span v-show="!show">Начать поиск</span>
           <span v-show="show">Остановить поиск </span>
       </button> 
-      <span v-if="show"><sync-outlined spin/></span>
+      <span v-show="show"><sync-outlined spin/></span>
     </div>
     <button class="menu-item" @click="href='#'">
       <div class="tournament"></div>
@@ -23,15 +23,15 @@
       Создать пользовательский турнир
     </button>
     
-    <button class="menu-item" @click="isVisible2=!isVisible2">
+    <button class="menu-item" @click="isVisible2=!isVisible2; isVisible=false">
       <div class="bot"></div>
       Игра с ботом
     </button>
-    <div class="panel" v-if="isVisible2">
+    <div class="panel" v-show="isVisible2">
       <SelectVariant />
       <p>Время на ход (секунды)</p>
       <input type="number" name="time" min="10" max="60" step="5" value="30">
-      <button style="float: right">
+      <button >
           Начать игру          
       </button> 
     </div>    
@@ -57,7 +57,7 @@ export default defineComponent({
   }),
   components: {
     SelectVariant, SyncOutlined, SettingsButton
-  },  
+  },
 });
 </script>
 
@@ -126,6 +126,9 @@ style.<style lang="scss" scoped>
     line-height: 24px
   }
   .panel button:hover {
+    background-color: #bebebe;
+  }
+  .panel button:focus {
     background-color: #bebebe;
   }
   .panel {

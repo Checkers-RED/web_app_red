@@ -6,11 +6,8 @@
     </div>
     <div class="col-2">     
       
-      <Friends />
+      <Friends />      
       
-      <Notifications />
-
-      <FindFriend />
     </div>
   </div>
 </template>
@@ -18,13 +15,12 @@
 <script>
 import ListMenu from '@/components/ListMenu'
 import Friends from '@/components/Friends.vue';
-import Notifications from '@/components/Notifications.vue';
-import FindFriend from '@/components/FindFriend.vue';
+
 
 export default {
   name: 'HomeView',
   components: {
-    ListMenu, Friends, Notifications, FindFriend
+    ListMenu, Friends, 
   }
   
 }

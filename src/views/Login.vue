@@ -12,10 +12,10 @@
         <button class="show"></button>
       </div>
       <div class="btn-group">
-        <button class="settings"><i class="settingsicon"></i></button>
-        <button class="forgot">Забыли пароль?</button>
-        <button class="registration">Регистрация</button>
-        <button class="login" type="submit">Вход</button>
+        <button class="btn settings"><i class="settingsicon"></i></button>
+        <a href="/forgot" class="btn forgot">Забыли пароль?</a>
+        <a href="/registration" class="btn registration">Регистрация</a>
+        <button class="btn login" type="submit">Вход</button>
       </div>    
     </div>
   </div>
@@ -59,6 +59,8 @@
     border-radius: 0px 11px 11px 0px;
     border: 1px solid #e0e0e0;
     border-left: none;
+    background: url(/public/img/icons/view-conceal-symbolic.symbolic.png) no-repeat center/23px;
+    background-color: #e6e6e6;
   }
   .input-container i {
     width: 45px;
@@ -69,12 +71,10 @@
     border-radius: 11px 0px 0px 11px;
   }
   .usericon {
-    background: url(/public/img/icons/avatar-default-symbolic.symbolic.png) no-repeat center;
-    background-size: 30px;
+    background: url(/public/img/icons/avatar-default-symbolic.symbolic.png) no-repeat center/30px;
   }
   .passicon {
-    background: url(/public/img/icons/dialog-password-symbolic.symbolic.png) no-repeat center;
-    background-size: 30px;
+    background: url(/public/img/icons/dialog-password-symbolic.symbolic.png) no-repeat center/30px;
   }
   input {
     height: 45px;
@@ -93,31 +93,37 @@
     padding: 15px 0;
     width: 100%; 
   }  
-  .btn-group button {        
+  .btn {
+    display: inline-block;    
     height: 45px;    
-    background-color: #e6e6e6;      
+    background-color: #e6e6e6;    
     font-weight: 400;
     font-size: 20px;
-    line-height: 24px;       
+    line-height: 24px;
+    color: #000000;    
     border: 1px solid #e0e0e0;
-    cursor: pointer;        
+    cursor: pointer;
+    vertical-align: middle; 
   }
-  .btn-group button:not(:last-child) {
+  .btn:not(:last-child) {
     border-right: none;
   }
-  button:hover {
+  button:hover, a:hover {
     background-color: #bebebe;
   }
   .settings {
     border-radius: 11px 0px 0px 11px;    
-    width: 45px;        
+    width: 45px;
     background: url(/public/img/icons/applications-system-symbolic.symbolic.png) no-repeat center/25px;
+    background-color: #e6e6e6; 
   }
-  .forgot {
+  .forgot {    
     width: 183px;
+    padding: 10px 0;
   }
   .registration {
     width: 148px;
+    padding: 10px 0;
   }
   .login {
     width: 94px;

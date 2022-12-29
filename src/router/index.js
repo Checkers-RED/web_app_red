@@ -17,7 +17,11 @@ const routes = [
     name: 'registration',
     component: () => import('../views/Registration.vue')
   },
-  
+  {
+    path: '/forgot',
+    name: 'forgot',
+    component: () => import('../views/ForgotPass.vue')
+  }
 ]
 
 const router = createRouter({
