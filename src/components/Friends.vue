@@ -14,12 +14,16 @@
         <div class="panel" v-show="isVisible">
           <SelectVariant />
           <p>Время на ход (секунды)</p>
-          <input type="number" name="time" min="10" max="60" step="5" value="30">
-          <span v-show="show"><sync-outlined spin/></span>
-          <button @click="show = !show">
-              <span v-show="!show">Отправить приглашение</span>
-              <span v-show="show">Ожидание ответа...</span>
-          </button>           
+          <div class="time">
+            <input type="number" name="time" min="10" max="60" step="5" value="30">
+            <div class="btn">
+              <span v-show="show"><sync-outlined spin/></span>
+              <button @click="show = !show">
+                  <span v-show="!show">Отправить приглашение</span>
+                  <span v-show="show">Ожидание ответа...</span>
+              </button>
+            </div>
+          </div>         
       </div>     
       </ul>
       <button class="addfriend" @click="isOpen=!isOpen">
@@ -101,7 +105,7 @@
   .friends li:hover {
     background-color: #e6e6e6;
   }
-    .avatar {
+  .avatar {
     width: 45px;
     height: 45px;
     border-radius: 50%;
@@ -132,21 +136,31 @@
   .delete:hover {
     background-color: #ff5b5b;
   }
-    .panel {
+  .panel {
     width: 500px;
     margin: 0 -40px;
     padding: 15px;
     border-bottom: 1px solid #E0E0E0;
   }
-  .panel button {
+  .time {
+    display: flex;
+    align-items: center;
+  }
+  .btn {
+    margin-left: auto;
+  }
+  .btn span {
+    margin-right: 5px;
+  }
+  .time button {
     height: 45px;
     background-color: #e6e6e6;
     border: none;
     border-radius: 11px;
-    margin: 20px 20px 0px 0px;
     padding: 0px 15px;
     font-size: 20px; 
     line-height: 24px;
+    margin-left: auto;
   }
   .panel button:hover {
     background-color: #bebebe;
@@ -160,11 +174,11 @@
     font-size: 20px;
     line-height: 24px;
   }
-  .panel input {
-    margin-top: 20px;
+  .time input {
     height: 45px;
     width: 60px;
     text-align: center;
+    border-radius: 0;
     border: 1px solid #E0E0E0;
     font-weight: 400;
     font-size: 20px;
