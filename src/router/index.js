@@ -17,7 +17,16 @@ const routes = [
     name: 'registration',
     component: () => import('../views/Registration.vue')
   },
-  
+  {
+    path: '/forgot',
+    name: 'forgot',
+    component: () => import('../views/ForgotPass.vue')
+  },
+  {
+    path: '/play',
+    name: 'play',
+    component: () => import('../views/Play.vue')
+  }
 ]
 
 const router = createRouter({

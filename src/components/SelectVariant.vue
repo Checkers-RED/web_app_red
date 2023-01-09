@@ -1,15 +1,10 @@
 <template>
   <p>Набор игровых правил</p>
-    <a-select
-      v-model:value="value"
-      label-in-value
-      style="width: 100%;
-      font-weight: 400;    
-      font-size: 20px; 
-      line-height: 24px;"
-      :options="options"
+    <select :options="options"
       @change="handleChange"
-    ></a-select>
+    >
+      <option v-for="option in options" :key="option.value">{{option.label}}</option>
+    </select>
   </template>
 
   <script>
@@ -41,10 +36,26 @@
   });
   </script>
 
-  <style lang="scss" scoped>
-    p {
-      font-weight: 400;
-      font-size: 20px;
-      line-height: 24px;
-    }
-  </style>
+<style lang="scss" scoped>
+  p {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+  }
+  select {
+    width: 470px;
+    height: 60px;
+    font-weight: 400;    
+    font-size: 20px; 
+    line-height: 24px;
+    padding: 15px;
+    background: #E6E6E6;
+    border: 1px solid #E0E0E0;
+    border-radius: 11px;
+    appearance: none;
+    background-image: url(/public/img/icons/pan-down-symbolic.symbolic.png);
+    background-repeat: no-repeat, repeat;
+    background-position: right .7em top 50%, 0 0;
+    background-size: 24px auto, 100%; 
+  }
+</style>

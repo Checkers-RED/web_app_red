@@ -62,6 +62,7 @@
   .back {
     height: 75px;
     width: 100%;
+    padding: 15px;
     font-weight: 400;
     font-size: 20px;
     line-height: 24px;  
@@ -83,5 +84,6 @@
     border-radius: 50%;
     background: url(/public/img/icons/go-home-symbolic.symbolic.png) no-repeat center/30px;
     background-color: #e6e6e6; 
+    margin-right: 12px;
   }
 </style>

@@ -1,17 +1,17 @@
 <template>
   <h1>Главное меню</h1>
   <div class="menu">
-    <button class="menu-item" @click="isVisible=!isVisible">
+    <button class="menu-item" @click="isVisible=!isVisible; isVisible2=false">
       <div class="match"></div>
       Рейтинговый матч
     </button>
-    <div class="panel" v-if="isVisible">
+    <div class="panel" v-show="isVisible">
       <SelectVariant />
       <button @click="show = !show">
           <span v-show="!show">Начать поиск</span>
           <span v-show="show">Остановить поиск </span>
       </button> 
-      <span v-if="show"><sync-outlined spin/></span>
+      <span v-show="show"><sync-outlined spin/></span>
     </div>
     <button class="menu-item" @click="href='#'">
       <div class="tournament"></div>
@@ -23,17 +23,17 @@
       Создать пользовательский турнир
     </button>
     
-    <button class="menu-item" @click="isVisible2=!isVisible2">
+    <button class="menu-item" @click="isVisible2=!isVisible2; isVisible=false">
       <div class="bot"></div>
       Игра с ботом
     </button>
-    <div class="panel" v-if="isVisible2">
+    <div class="panel" v-show="isVisible2">
       <SelectVariant />
       <p>Время на ход (секунды)</p>
-      <input type="number" name="time" min="10" max="60" step="5" value="30">
-      <button style="float: right">
-          Начать игру          
-      </button> 
+      <div class="time">
+        <input type="number" name="time" min="10" max="60" step="5" value="30">      
+        <button>Начать игру</button>
+      </div> 
     </div>    
     <div class="nickname">
       Никнейм
@@ -57,11 +57,11 @@ export default defineComponent({
   }),
   components: {
     SelectVariant, SyncOutlined, SettingsButton
-  },  
+  },
 });
 </script>
 
-style.<style lang="scss" scoped>
+<style lang="scss" scoped>
   .menu {
     width: 500px;
     height: 700px;
@@ -120,12 +120,15 @@ style.<style lang="scss" scoped>
     background-color: #e6e6e6;
     border: none;
     border-radius: 11px;
-    margin: 20px 20px 0px 0px;
+    margin-top: 20px;
     padding: 0px 15px;
     font-size: 20px; 
     line-height: 24px
   }
   .panel button:hover {
+    background-color: #bebebe;
+  }
+  .panel button:focus {
     background-color: #bebebe;
   }
   .panel {
@@ -138,7 +141,15 @@ style.<style lang="scss" scoped>
     font-size: 20px;
     line-height: 24px;
   }
-  .panel input {
+  .time {
+    display: flex;
+    align-items: center;
+  }
+  .time button{
+    margin-left: auto;
+    margin-top: 0px;
+  }
+  .time input {
     height: 45px;
     width: 60px;
     text-align: center;
@@ -146,7 +157,7 @@ style.<style lang="scss" scoped>
     font-weight: 400;
     font-size: 20px;
     line-height: 24px;
-  }
+  }  
   .nickname {
     width: 500px; 
     height: 75px;   

@@ -1,11 +1,11 @@
 <template>
     <div class="page">
-    <h1 style="text-align:center">Регистрация</h1>    
+    <h1>Регистрация</h1>    
     <div class="container">
-      <button class="back" @click="document.location='/login'">
+      <a class="back" href="/login">
         <div class="backicon"></div> 
         Вернуться к окну входа
-      </button>
+      </a>
       <div class="input-container">
         <i class="icon"></i>
         <input type="text" placeholder="Имя пользователя" name="uname" required>
@@ -47,10 +47,7 @@
   });
 </script>
 
-<style lang="scss" scoped>  
-  .page {
-    padding-top: 100px;
-  }
+<style lang="scss" scoped>    
   .container {
     width: 500px;
     height: 520px;
@@ -75,6 +72,8 @@
     border-radius: 0px 11px 11px 0px;
     border: 1px solid #e0e0e0;
     border-left: none;
+    background: url(/public/img/icons/view-conceal-symbolic.symbolic.png) no-repeat center/23px;
+    background-color: #e6e6e6;
   }
   .icon {
     width: 45px;
@@ -136,7 +135,12 @@
   }  
   .back {
     height: 75px;
-    width: 100%;    
+    width: 100%;
+    padding: 15px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    color: #000000;    
     text-align: left;
     display: flex;
     align-items: center;
