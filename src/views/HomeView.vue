@@ -26,17 +26,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
-  .row {
-    width: 1120px;
-    margin-left: 400px;
-    margin-right: 400px;
-    display: flex;
-    padding-top: 100px;
+<style lang="scss">  
+  .row {    
+    display: flex;    
   }
   .col-1 {
     flex: 50%;
-    padding-right: 60px;
+    margin-right: 60px;
   }
   .col-2 {      
     flex: 50%;

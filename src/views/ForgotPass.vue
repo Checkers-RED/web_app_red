@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div v-show="step == 1" class="step">
-      <h1 style="text-align:center">Восстановление пароля</h1>    
+      <h1>Восстановление пароля</h1>    
       <div class="container">
         <a class="back" href="/login">
           <div class="backicon"></div> 
@@ -12,12 +12,12 @@
           <input type="text" placeholder="Имя пользователя" name="uname" required>
         </div>
         <button class="settings"><i></i></button>                  
-        <button class="btn" @click="nextStep">Продолжить</button>        
+        <button class="btn" @click="nextStep">Продолжить</button>
       </div>
     </div>
 
     <div v-show="step == 2" class="step">
-      <h1 style="text-align:center">Контрольный вопрос</h1>    
+      <h1>Контрольный вопрос</h1>    
       <div class="container">
         <a class="back" href="/login">
           <div class="backicon"></div> 
@@ -38,7 +38,7 @@
     </div>
 
     <div v-show="step == 3" class="step">
-      <h1 style="text-align:center">Контрольный вопрос</h1>    
+      <h1>Контрольный вопрос</h1>    
       <div class="container">
         <a class="back" href="/login">
           <div class="backicon"></div> 
@@ -83,18 +83,12 @@
 </script>
 
 <style lang="scss" scoped>  
-  .page {
-    padding-top: 100px;
-  }
   .container {
     width: 500px;
-    height: 300px;
-    margin: auto;     
     background: #FFFFFF;
     border: 1px solid #E0E0E0;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
-    border-radius: 11px;
-    text-align: center;        
+    border-radius: 11px;     
   }
   .input-container { 
     height: 75px;   
@@ -112,7 +106,6 @@
     border-bottom: 1px solid #E0E0E0;
   }
   .question p {
-    text-align: left;
     font-weight: 400;
     font-size: 20px;
     line-height: 24px;
@@ -132,7 +125,6 @@
     height: 45px;
     padding: 15px;
     border: 1px solid #e0e0e0;
-    border-right: none;
     border-radius: 11px 0px 0px 11px;
     background: url(/public/img/icons/avatar-default-symbolic.symbolic.png) no-repeat center/30px;
   }
@@ -140,9 +132,6 @@
     background: url(/public/img/icons/channel-secure-symbolic.symbolic.png) no-repeat center/30px;
   }
   .quest {
-    width: 45px;
-    height: 45px;
-    border: 1px solid #e0e0e0;
     border-radius: 50%;
     margin-right: 12px;
     background: url(/public/img/icons/help-faq-symbolic.symbolic.png) no-repeat center/30px;
@@ -155,7 +144,8 @@
     width: 100%;
     padding: 15px;        
     display: inline-block;
-    border: 1px solid #e0e0e0; 
+    border: 1px solid #e0e0e0;
+    border-left: none;
     font-weight: 400;
     font-size: 20px;
     line-height: 24px;   
@@ -174,13 +164,11 @@
     cursor: pointer;        
   }
   .settings {
-    float: left;
     margin: 15px;
     border-radius: 50%;
     width: 45px;
     background: url(/public/img/icons/applications-system-symbolic.symbolic.png) no-repeat center/25px;
-    background-color: #E0E0E0;
-    
+    background-color: #E0E0E0;    
   }
   .btn {
     float: right;

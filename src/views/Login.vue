@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <h1 style="text-align:center">Вход в учетную запись</h1>
+    <h1>Вход в учетную запись</h1>
     <div class="container">
       <div class="input-container">
         <i class="usericon"></i>
@@ -31,10 +31,7 @@
   });
 </script>
 
-<style lang="scss" scoped>  
-  .page {
-    padding-top: 100px;
-  }
+<style lang="scss" scoped>    
   .container {
     width: 500px;
     height: 225px;

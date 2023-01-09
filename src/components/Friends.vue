@@ -3,9 +3,9 @@
     <h1>Список друзей</h1>
     <div class="friends">
       <ul>
-        <li @click="isVisible=!isVisible">
+        <li v-for="friend in friends" :key="friend" @click="isVisible=!isVisible">
           <div class="avatar"></div>
-          Никнейм
+          {{friend.nickname}}
           <div class="btn-group">
             <button class="info"></button>
             <button class="delete"></button>
@@ -24,7 +24,7 @@
               </button>
             </div>
           </div>         
-      </div>     
+        </div>     
       </ul>
       <button class="addfriend" @click="isOpen=!isOpen">
         <div class="add"></div>
@@ -60,6 +60,12 @@
     isOpen: true,
     isVisible: false,
     show: false,
+  
+    friends: [
+      {nickname: 'Никнейм_1'},
+      {nickname : 'Никнейм_2'}
+    ]
+    
   }),
   components: {
     Notifications, SelectVariant, SyncOutlined

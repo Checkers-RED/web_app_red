@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-    <h1 style="text-align:center">Регистрация</h1>    
+    <h1>Регистрация</h1>    
     <div class="container">
       <a class="back" href="/login">
         <div class="backicon"></div> 
@@ -47,10 +47,7 @@
   });
 </script>
 
-<style lang="scss" scoped>  
-  .page {
-    padding-top: 100px;
-  }
+<style lang="scss" scoped>    
   .container {
     width: 500px;
     height: 520px;
