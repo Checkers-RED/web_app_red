@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <div class="avatar">
-      <img src=photo height="45px" width="45px">
+      <img :src='photo' height="45px" width="45px">
     </div>
     <div class="nickname">
       <p>{{ nickname }}</p>
@@ -21,7 +21,7 @@ export default {
       currSession: "",
       nickname: "Nick",
       score: "123",
-      photo: "@/public/img/icons/ava_1.png",
+      photo: "",
     }
   },
   methods: {

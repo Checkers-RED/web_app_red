@@ -17,7 +17,7 @@ import Desk from '@/components/Desk.vue';
 
 
 export default {
-  name: 'HomeView',
+  name: 'Play',
   components: {
     Move, Desk
   }
