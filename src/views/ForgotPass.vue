@@ -12,7 +12,7 @@
           <input v-model="username" type="text" placeholder="Имя пользователя" name="uname" required>
         </div>
         <button class="settings"><i></i></button>                  
-        <button class="btn" @click="RequestNick, nextStep">Продолжить</button>
+        <button class="btn" @click="RequestNick">Продолжить</button>
       </div>
     </div>
 
@@ -33,7 +33,7 @@
           <button class="show" @click="switchVisibilityAnswer"></button>
         </div>
         <button class="settings"><i></i></button>
-        <button class="btn" @click="AnsQues, nextStep">Продолжить</button>        
+        <button class="btn" @click="AnsQues">Продолжить</button>        
       </div>      
     </div>
 
@@ -63,6 +63,7 @@
 
 <script>
   import {HTTP} from '@/assets/http-common.js';
+  import Cookies from "js-cookie";
 
   export default {     
     data() {
@@ -95,11 +96,13 @@
       },
 
       RequestNick() {
-        HTTP.post(`/ReqNick`, username)
+        let payload = {"nick": this.username}
+
+        HTTP.post(`/ReqNick`, payload)
           .then(response => {
             this.token = response.data.token
-            this.password = response.data.question
-
+            this.question = response.data.question
+            this.nextStep()
           })
           .catch(error => {
             alert("Пользователь не найден")
@@ -107,9 +110,12 @@
       },
 
       AnsQues() {
-        HTTP.post(`/AnsQues`, token, answer)
+        let payload = {"token": this.token, "ans": this.answer}
+
+        HTTP.post(`/AnsQues`, payload)
           .then(response => {
-            this.token = response.data
+            this.token = response.data.newToken
+            this.nextStep()
           })
           .catch(error => {
             alert("Неверный ответ")
@@ -117,10 +123,14 @@
       },
 
       ChangePass() {
+        let payload = {"token": this.token, "newPass": this.password}
+
         if (this.password == this.passwordConfirm) {
-          HTTP.post(`/ChangePass`, token, password)
+          HTTP.post(`/ChangePass`, payload)
             .then(response => {
-              this.currSession = response.data
+              Cookies.set("current_session", response.data.current_session)
+              this.currSession = response.data.current_session
+              this.$router.push('/');
             })
         } else {
           alert("Пароли не совпадают")

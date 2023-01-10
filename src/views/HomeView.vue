@@ -14,7 +14,7 @@
 
 <script>
 import ListMenu from '@/components/ListMenu'
-import Friends from '@/components/Friends.vue';
+import Friends from '@/components/Friends.vue'
 
 
 export default {

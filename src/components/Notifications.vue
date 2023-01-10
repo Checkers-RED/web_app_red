@@ -5,6 +5,41 @@
     </div>
 </template>
 
+<script>
+import {HTTP} from '@/assets/http-common.js';
+import Cookies from "js-cookie"
+
+export default {
+  data () {
+    return {
+      timer: null,
+      notifications: [
+
+      ]
+    }
+  },
+  methods: {
+    getNotifs() {
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
+      
+      HTTP.post(`/GetNotifs`, payload)
+        .then(response => {
+          this.friends = response.data
+      })
+    }
+  },
+  mounted: function () {
+    this.timer = setInterval(() => {
+      this.getNotifs()
+    }, 5000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
+  }
+}
+</script>
+
 <style lang="scss" scoped>
   .notify {
     width: 500px;

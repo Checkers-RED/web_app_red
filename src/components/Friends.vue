@@ -3,9 +3,9 @@
     <h1>Список друзей</h1>
     <div class="friends">
       <ul>
-        <template v-for="friend in friends" :key="friend.uid" >
+        <template v-for="friend in friends" :id="friend.id" :key="friend" >
         <li @click="isVisible=!isVisible">
-          <div class="avatar"> <img :src="photo" width="45" height="45"> </div>
+          <div class="avatar"> <img src="" width="45" height="45"> </div>
           {{friend.nick}}
           <div class="btn-group">
             <button class="info"></button>
@@ -64,9 +64,12 @@
   import { SyncOutlined } from '@ant-design/icons-vue';
   import Notifications from '@/components/Notifications.vue';
   import SelectVariant from './SelectVariant.vue';
+  import Cookies from "js-cookie"
 
   export default {
   data: () => ({
+    timer: null,
+
     isOpen: true,
     isVisible: false,
     show: false,
@@ -77,12 +80,12 @@
 
   
     friends: [
-      { uid: "1",
-        nick: 'Никнейм_1',
+      { id: "",
+        nick: '',
         photo: ""
       },
-      { uid: "2",
-        nick: 'Никнейм_2',
+      { uid: "",
+        nick: '',
         photo: ""
       }
     ]
@@ -91,17 +94,27 @@
   components: {
     Notifications, SelectVariant, SyncOutlined
   },
-
   methods: {
-    GetFriends() {
-      HTTP.post(`/GetFriends`, currSession)
+    checkFriends() {
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
+      
+      HTTP.post(`/GetFriends`, payload)
         .then(response => {
           this.friends = response.data
-        })
+      })
     }
+  },
+  mounted: function () {
+    this.timer = setInterval(() => {
+      this.checkFriends()
+    }, 5000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
   }
-  
 }
+
 </script>
 
 <style lang="scss" scoped>
