@@ -8,12 +8,13 @@
     <div class="table_div">
       <table>
         <tr v-for="Cell_v in vertCells">
-          <td v-for="Cell_h in horizCells" :id="(Cell_v - 1) * 8 + Cell_h" class="td" :class="getCellColor()"></td>
+          <td v-for="Cell_h in horizCells" :class="getCellColor()"></td>
         </tr>
       </table>
       <table>
-        <tr v-for="Cell_v in vertCells">
-          <td v-for="Cell_h in horizCells" :id="(Cell_v - 1) * 8 + Cell_h" :class="getCheckerClass(id)" @click="getCheckerClick(id)"></td>
+        <tr class="tr" v-for="Cell_v in vertCells">
+          <div v-for="Cell_h in horizCells" :id="(Cell_v - 1) * 8 + Cell_h" @click="getCheckerClick" :class="getCheckerClass($event)">
+          </div>
         </tr>
       </table>
     </div>
@@ -84,8 +85,8 @@ export default {
       }
       return "gray-backing"
     },
-    getCheckerClick(id) {
-      alert("text")
+    getCheckerClick() {
+      alert(event.currentTarget.id)
       //Если состояние не хода, то вызываем пакет ручек, связанных с началом ходов игроков
 
       //Если состояние хода, то вызываем пакет ручек, связанных с началом ходов игроков
@@ -95,7 +96,9 @@ export default {
       this.lastCheckerID += 1;
       return this.lastCheckerID;
     },
-    getCheckerClass(id) {
+    getCheckerClass() {
+      /*
+      let id = event.target.id
       //id = 8 * vertic + horiz => vertic = id div 8 + 1, horiz = id mod 8 + 1
       const vertic = Math.floor(id/8);
       const horiz = (id % 8) + 1;
@@ -121,6 +124,7 @@ export default {
           }
         }
       }
+      */
 
       return "null-piece"
     }
@@ -199,9 +203,15 @@ export default {
     width: 100%;
     height: 100%;
   }
+  .tr {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    
+  }
   .td {
-    width: 80px;
-    height: 80px;
+    width: 79px;
+    height: 79px;
     background-color: #bebebe;
     text-align: center;
     vertical-align: middle;
@@ -223,9 +233,10 @@ export default {
   .null-piece {
     width: 80px;
     height: 80px;
-    background-color: #bebebe;
     text-align: center;
     vertical-align: middle;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
   .white-piece {
     padding: 10px;
