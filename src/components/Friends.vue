@@ -5,8 +5,8 @@
       <ul>
         <template v-for="friend in friends" :id="friend.id" :key="friend" >
         <li @click="isVisible=!isVisible">
-          <div class="avatar"></div>
-          {{friend.nickname}}
+          <div class="avatar"> <img src="" width="45" height="45"> </div>
+          {{friend.nick}}
           <div class="btn-group">
             <button class="info"></button>
             <button class="delete"></button>
@@ -45,17 +45,25 @@
     </button>
     <div class="input-container">
       <i class="icon"></i>
-      <input type="text" placeholder="Имя пользователя" name="uname">
+      <input v-model="nick" type="text" placeholder="Имя пользователя" name="uname">
     </div> 
+    <div class="found">
+      <div class="avatar"> <img :src="friend.photo" width="45" height="45"> </div>
+      {{found.nick}}
+      <div class="btn-group">
+        <button class="info"></button>
+        <button class="toAdd"></button>
+      </div>
+    </div>
   </div>
   </div>
 </template>
 
 <script>  
+  import {HTTP} from '@/assets/http-common.js';
   import { SyncOutlined } from '@ant-design/icons-vue';
   import Notifications from '@/components/Notifications.vue';
   import SelectVariant from './SelectVariant.vue';
-  import {HTTP} from '@/assets/http-common.js'
   import Cookies from "js-cookie"
 
   export default {
@@ -65,10 +73,21 @@
     isOpen: true,
     isVisible: false,
     show: false,
+
+    currSession: "",
+    nick: "",
+    found: "",
+
   
     friends: [
-      {nickname: 'Никнейм_1'},
-      {nickname : 'Никнейм_2'}
+      { id: "",
+        nick: '',
+        photo: ""
+      },
+      { uid: "",
+        nick: '',
+        photo: ""
+      }
     ]
     
   }),
@@ -82,7 +101,6 @@
       
       HTTP.post(`/GetFriends`, payload)
         .then(response => {
-          alert("friends")
           this.friends = response.data
       })
     }
@@ -162,6 +180,11 @@
   .delete {
     background: url(/public/img/icons/action-unavailable-symbolic.symbolic.png) no-repeat center/23px;
     background-color: #ff8181;
+    border-radius: 0px 17.5px 17.5px 0px;
+  }
+  .toAdd {
+    background: url(/public/img/icons/contact-new-symbolic.symbolic.png) no-repeat center/23px;
+    background-color: #9AFF89;
     border-radius: 0px 17.5px 17.5px 0px;
   }
   .delete:hover {

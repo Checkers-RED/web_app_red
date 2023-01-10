@@ -10,7 +10,6 @@
         <i class="icon"></i>
         <input v-model="username" type="text" placeholder="Имя пользователя" name="uname" required>
       </div> 
-      {{ username }}
       <div class="input-container">
         <i class="pass icon"></i>   
         <input v-model="password" :type="passwordFieldType" placeholder="Пароль" name="psw" required>
@@ -76,6 +75,7 @@ import { Alert } from 'ant-design-vue';
             .then((response) => {
               Cookies.set("current_session", response.data.current_session)
               this.currSession = response.data.current_session
+              this.$router.push('/');
             })
         } else {
           alert("Ошибка во введённых данных")

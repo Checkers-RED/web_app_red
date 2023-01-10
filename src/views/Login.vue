@@ -1,6 +1,4 @@
 <template>
-  <button @click="doPing()">TestPing</button>
-    <p>{{ response_result }}</p>
   <div class="page">
     <h1>Вход в учетную запись</h1>
     <div class="container">
@@ -17,7 +15,7 @@
         <button class="btn settings"><i class="settingsicon"></i></button>
         <a href="/forgot" class="btn forgot">Забыли пароль?</a>
         <a href="/registration" class="btn registration">Регистрация</a>
-        <button class="btn login" type="submit.prevent" @click="login">Вход</button>
+        <button class="btn login" @click="login">Вход</button>
       </div>    
     </div>
   </div>
@@ -48,6 +46,7 @@ export default {
         .then((response) => {
           Cookies.set("current_session", response.data.current_session)
           this.currSession = response.data.current_session
+          this.$router.push('/');
         })
         .catch(err => {console.log('error')})
       console.log('login')
