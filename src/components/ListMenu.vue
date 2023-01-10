@@ -36,7 +36,7 @@
       </div> 
     </div>    
     <div class="nickname">
-      Никнейм
+      <Profile />
       <SettingsButton />
     </div>
   </div>
@@ -48,6 +48,7 @@ import { SyncOutlined } from '@ant-design/icons-vue';
 
 import SelectVariant from '@/components/SelectVariant'
 import SettingsButton from '@/components/SettingsButton.vue'
+import Profile from './Profile.vue';
 
 export default defineComponent({
   data: () => ({
@@ -56,7 +57,7 @@ export default defineComponent({
     show: false,
   }),
   components: {
-    SelectVariant, SyncOutlined, SettingsButton
+    SelectVariant, SyncOutlined, SettingsButton, Profile
   },
 });
 </script>
@@ -165,8 +166,6 @@ export default defineComponent({
     bottom: 0;       
     border-top: 1px solid #E0E0E0;
     padding: 15px;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 24px;
+    display: flex;
   }
 </style>

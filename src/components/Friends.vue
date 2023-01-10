@@ -3,7 +3,8 @@
     <h1>Список друзей</h1>
     <div class="friends">
       <ul>
-        <li v-for="friend in friends" :key="friend" @click="isVisible=!isVisible">
+        <template v-for="friend in friends" :key="friend" >
+        <li @click="isVisible=!isVisible">
           <div class="avatar"></div>
           {{friend.nickname}}
           <div class="btn-group">
@@ -24,7 +25,8 @@
               </button>
             </div>
           </div>         
-        </div>     
+        </div>
+        </template>     
       </ul>
       <button class="addfriend" @click="isOpen=!isOpen">
         <div class="add"></div>
@@ -55,7 +57,6 @@
   import SelectVariant from './SelectVariant.vue';
 
   export default {
-  name: 'HomeView',
   data: () => ({
     isOpen: true,
     isVisible: false,

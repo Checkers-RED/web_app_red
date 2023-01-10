@@ -8,43 +8,76 @@
       </a>
       <div class="input-container">
         <i class="icon"></i>
-        <input type="text" placeholder="Имя пользователя" name="uname" required>
+        <input v-model="username" type="text" placeholder="Имя пользователя" name="uname" required>
       </div> 
       <div class="input-container">
         <i class="pass icon"></i>   
-        <input type="password" placeholder="Пароль" name="psw" required>
-        <button class="show"></button>
+        <input v-model="password" :type="passwordFieldType" placeholder="Пароль" name="psw" required>
+        <button class="show" @click="switchVisibility"></button>
       </div>
       <div class="input-container">
         <i class="pass icon"></i>   
-        <input type="password" placeholder="Повторите пароль" name="confpsw" required>
-        <button class="show"></button>
+        <input v-model="passwordConfirm" :type="passwordConfirmFieldType" placeholder="Повторите пароль" name="confpsw" required>
+        <button class="show" @click="switchVisibilityConfirm"></button>
       </div>
       <div class="input-container">
         <i class="quest icon"></i>
-        <input type="text" placeholder="Контрольный вопрос" name="question" required>
+        <input v-model="question" type="text" placeholder="Контрольный вопрос" name="question" required>
       </div> 
       <div class="input-container">
         <i class="answ icon"></i>   
-        <input type="password" placeholder="Ответ на контрольный вопрос" name="answer" required>
-        <button class="show"></button>
+        <input v-model="answer" :type="answerFieldType" placeholder="Ответ на контрольный вопрос" name="answer" required>
+        <button class="show" @click="switchVisibilityAnswer"></button>
       </div>      
       <button class="settings"><i></i></button>
                 
-      <button class="registration" type="submit">Зарегистрироваться</button>        
+      <button class="registration" type="submit" @click="CreateAccount">Зарегистрироваться</button>        
     </div>
   </div>
 </template>
 
 <script>
-  import { defineComponent } from 'vue';
- 
+import {HTTP} from '@/assets/http-common.js';
 
-  export default defineComponent({    
-    components: {
-        
-    },  
-  });
+  export default {    
+    data() {
+      return {
+        username: "",
+        password: "",
+        passwordFieldType: "password",      
+        passwordConfirm: "",      
+        passwordConfirmFieldType: "password",
+        question: "",
+        answer: "",
+        answerFieldType: "password",
+        currSession: "",
+      }
+    },
+    methods: {
+      switchVisibility() {
+        this.passwordFieldType = this.passwordFieldType === "password" ? "text" : "password";
+      },
+      switchVisibilityConfirm() {
+        this.passwordConfirmFieldType = this.passwordConfirmFieldType === "password" ? "text" : "password";
+      },
+      switchVisibilityAnswer() {
+        this.answerFieldType = this.answerFieldType === "password" ? "text" : "password";
+      },
+
+      CreateAccount() {
+        if (this.password == this.passwordConfirm) {
+          HTTP.post(`/CreateAccount`, {
+          username, password, question, answer 
+          })
+            .then((response) => {
+              this.currSession = response.data
+            })
+        } else {
+          alert("Пароли не совпадают")
+        }       
+      }
+    }
+  }
 </script>
 
 <style lang="scss" scoped>    
@@ -103,7 +136,7 @@
     font-size: 20px;
     line-height: 24px;   
   }
-  input[type="text"] {
+  input[name="uname"] input[name="question"] {
     border-radius: 0px 11px 11px 0px;
   }    
   button {        
