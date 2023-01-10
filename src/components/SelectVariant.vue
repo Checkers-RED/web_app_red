@@ -1,8 +1,6 @@
 <template>
   <p>Набор игровых правил</p>
-    <select :options="options"
-      @change="handleChange"
-    >
+    <select @change="handleChange">
       <option v-for="option in options" :key="option.value">{{option.label}}</option>
     </select>
   </template>

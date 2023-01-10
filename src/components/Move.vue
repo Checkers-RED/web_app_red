@@ -7,8 +7,12 @@
       </li>
     </ul>
     
+    <div class="opponent">
+      <Profile />
+      <GiveUp />
+    </div>
     <div class="nickname">
-      Никнейм
+      <Profile />
       <SettingsButton />
     </div>
   </div>
@@ -16,11 +20,13 @@
 
 <script>
 import SettingsButton from '@/components/SettingsButton.vue'
+import Profile from '@/components/Profile.vue'
+import GiveUp from '@/components/GiveUp.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    SettingsButton
+    SettingsButton, Profile, GiveUp
   },
   data () {
     return {
@@ -74,6 +80,18 @@ export default {
     line-height: 24px;
     border-bottom: 1px solid #E0E0E0;
   }
+  .opponent {
+    width: 500px; 
+    height: 75px;   
+    position: absolute;
+    bottom: 75px;       
+    border-top: 1px solid #E0E0E0;
+    padding: 15px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    display: flex;
+  }
   .nickname {
     width: 500px; 
     height: 75px;   
@@ -84,5 +102,6 @@ export default {
     font-weight: 400;
     font-size: 20px;
     line-height: 24px;
+    display: flex;
   }
 </style>

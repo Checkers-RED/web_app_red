@@ -9,10 +9,10 @@
         </a>
         <div class="input-container">
           <i class="icon"></i>
-          <input type="text" placeholder="Имя пользователя" name="uname" required>
+          <input v-model="username" type="text" placeholder="Имя пользователя" name="uname" required>
         </div>
         <button class="settings"><i></i></button>                  
-        <button class="btn" @click="nextStep">Продолжить</button>
+        <button class="btn" @click="RequestNick, nextStep">Продолжить</button>
       </div>
     </div>
 
@@ -25,15 +25,15 @@
         </a>
         <div class="question">
           <i class="quest icon"></i>
-          <p>Текст контрольного вопроса</p>
+          <p>{{ question }}</p>
         </div> 
         <div class="input-container">
           <i class="answ icon"></i>   
-          <input type="password" placeholder="Ответ на контрольный вопрос" name="answer" required>
-          <button class="show"></button>
+          <input v-model="answer" :type="answerFieldType" placeholder="Ответ на контрольный вопрос" name="answer" required>
+          <button class="show" @click="switchVisibilityAnswer"></button>
         </div>
         <button class="settings"><i></i></button>
-        <button class="btn" @click="nextStep">Продолжить</button>        
+        <button class="btn" @click="AnsQues, nextStep">Продолжить</button>        
       </div>      
     </div>
 
@@ -46,40 +46,88 @@
         </a>
         <div class="input-container">
           <i class="pass icon"></i>   
-          <input type="password" placeholder="Пароль" name="psw" required>
-          <button class="show"></button>
+          <input v-model="password" :type="passwordFieldType" placeholder="Пароль" name="psw" required>
+          <button class="show" @click="switchVisibility"></button>
         </div>
         <div class="input-container">
           <i class="pass icon"></i>   
-          <input type="password" placeholder="Повторите пароль" name="confpsw" required>
-          <button class="show"></button>
+          <input v-model="passwordConfirm" :type="passwordConfirmFieldType" placeholder="Повторите пароль" name="confpsw" required>
+          <button class="show"  @click="switchVisibilityConfirm"></button>
         </div>
         <button class="settings"><i></i></button>
-        <button class="btn" type="submit" >Изменить пароль</button>        
+        <button class="btn" type="submit" @click="ChangePass">Изменить пароль</button>        
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { defineComponent } from 'vue';
- 
+  import {HTTP} from '@/assets/http-common.js';
 
-  export default defineComponent({ 
-    components: {
-        
-    },
+  export default {     
     data() {
       return {
-        step: 1
+        step: 1,
+        username: "",
+        token: "",
+        question: "",
+        answer: "",
+        answerFieldType: "password",
+        password: "",
+        passwordFieldType: "password",      
+        passwordConfirm: "",      
+        passwordConfirmFieldType: "password",
+        currSession: "",
       }
     },
     methods: {
       nextStep() {
         this.step++
+      },
+      switchVisibilityAnswer() {
+        this.answerFieldType = this.answerFieldType === "password" ? "text" : "password";
+      },
+      switchVisibility() {
+        this.passwordFieldType = this.passwordFieldType === "password" ? "text" : "password";
+      },
+      switchVisibilityConfirm() {
+        this.passwordConfirmFieldType = this.passwordConfirmFieldType === "password" ? "text" : "password";
+      },
+
+      RequestNick() {
+        HTTP.post(`/ReqNick`, username)
+          .then(response => {
+            this.token = response.data.token
+            this.password = response.data.question
+
+          })
+          .catch(error => {
+            alert("Пользователь не найден")
+          })
+      },
+
+      AnsQues() {
+        HTTP.post(`/AnsQues`, token, answer)
+          .then(response => {
+            this.token = response.data
+          })
+          .catch(error => {
+            alert("Неверный ответ")
+          })
+      },
+
+      ChangePass() {
+        if (this.password == this.passwordConfirm) {
+          HTTP.post(`/ChangePass`, token, password)
+            .then(response => {
+              this.currSession = response.data
+            })
+        } else {
+          alert("Пароли не совпадают")
+        }        
       }
     }
-  });
+  };
 </script>
 
 <style lang="scss" scoped>  
@@ -150,7 +198,7 @@
     font-size: 20px;
     line-height: 24px;   
   }
-  input[type="text"] {
+  input[name="uname"] input[name="answer"] {
     border-radius: 0px 11px 11px 0px;
   }    
   button {        
