@@ -10,6 +10,7 @@
         <i class="icon"></i>
         <input v-model="username" type="text" placeholder="Имя пользователя" name="uname" required>
       </div> 
+      {{ username }}
       <div class="input-container">
         <i class="pass icon"></i>   
         <input v-model="password" :type="passwordFieldType" placeholder="Пароль" name="psw" required>
@@ -37,7 +38,9 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
 import {HTTP} from '@/assets/http-common.js';
+import { Alert } from 'ant-design-vue';
 
   export default {    
     data() {
@@ -65,15 +68,17 @@ import {HTTP} from '@/assets/http-common.js';
       },
 
       CreateAccount() {
+
         if (this.password == this.passwordConfirm) {
-          HTTP.post(`/CreateAccount`, {
-          username, password, question, answer 
-          })
+          let payload = {"nick": this.username, "pass": this.password, "ques": this.question, "ans": this.answer}
+
+          HTTP.post(`/CreateAccount`, payload)
             .then((response) => {
-              this.currSession = response.data
+              Cookies.set("current_session", response.data.current_session)
+              this.currSession = response.data.current_session
             })
         } else {
-          alert("Пароли не совпадают")
+          alert("Ошибка во введённых данных")
         }       
       }
     }

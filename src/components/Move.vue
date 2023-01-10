@@ -23,6 +23,13 @@ import SettingsButton from '@/components/SettingsButton.vue'
 import Profile from '@/components/Profile.vue'
 import GiveUp from '@/components/GiveUp.vue'
 
+/*
+      HTTP.post(`/Authorization/`, username, password)
+        .then((response) => {
+          this.currSession = response.data
+        })
+        .catch(err => {console.log('error')})
+*/
 export default {
   name: 'HomeView',
   components: {

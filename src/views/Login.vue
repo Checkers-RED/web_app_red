@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import Cookies from "js-cookie"
 import {HTTP} from '@/assets/http-common.js';
 export default {
   name: 'App',
@@ -42,9 +43,11 @@ export default {
     },
     
     login() {
-      HTTP.post(`/Authorization/`, username, password)
+      let payload = {"nick": this.username, "pass": this.password}
+      HTTP.post(`/Authorization/`, payload)
         .then((response) => {
-          this.currSession = response.data
+          Cookies.set("current_session", response.data.current_session)
+          this.currSession = response.data.current_session
         })
         .catch(err => {console.log('error')})
       console.log('login')

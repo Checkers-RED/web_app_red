@@ -13,27 +13,34 @@
 </template>
 
 <script>
-import {HTTP} from '@/assets/http-common.js';
+import Cookies from "js-cookie"
+import {HTTP} from '@/assets/http-common.js'
 
 export default {
   data() {
     return {
       currSession: "",
-      nickname: "Nick",
-      score: "123",
-      photo: "@/public/img/icons/ava_1.png",
+      nickname: "",
+      score: "",
+      photo: "",
     }
   },
   methods: {
     UserData() {
-      HTTP.post(`/UserScore`, currSession)
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
+      
+      HTTP.post(`/UserScore`, payload)
         .then(response => {
           this.nickname = response.data.nick
           this.score = response.data.score
           this.photo = response.data.photo
         })
     }
-  }
+  },
+ beforeMount(){
+    this.UserData()
+ }
 }
 </script>
 
