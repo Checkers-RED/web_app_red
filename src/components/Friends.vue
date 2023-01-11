@@ -79,16 +79,7 @@
     found: "",
 
   
-    friends: [
-      { id: "",
-        nick: '',
-        photo: ""
-      },
-      { uid: "",
-        nick: '',
-        photo: ""
-      }
-    ]
+    friends: []
     
   }),
   components: {
@@ -104,6 +95,9 @@
           this.friends = response.data
       })
     }
+  },
+  beforeMount(){
+    this.checkFriends()
   },
   mounted: function () {
     this.timer = setInterval(() => {
