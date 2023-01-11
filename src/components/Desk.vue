@@ -1,24 +1,36 @@
 <template>
   <h1>Ваш ход</h1>
-  <div class="desk">
-    <div class="desk-second">
-    <div class="number">
-      <p v-for="Cell in vertCells.slice().reverse()">{{ Cell }}</p>
+  <div class="full-desk">
+    <div class="letters" style="transform: rotate(180deg)">
+      <p v-for="Cell in horizCellsNames.slice().reverse()">{{ Cell }}</p>
     </div>
-    <div class="table_div">
-      <table>
-        <tr v-for="Cell_v in vertCells">
-          <td v-for="Cell_h in horizCells" :class="getCellColor()"></td>
-        </tr>
-      </table>
-      <table>
-        <tr class="tr" v-for="Cell_v in vertCells">
-          <div v-for="Cell_h in horizCells" :id="(Cell_v - 1) * 8 + Cell_h" @click="getCheckerClick" :class="getCheckerClass($event)">
-          </div>
-        </tr>
-      </table>
+    <div class="inner-desk">
+      <div class="number">
+        <p v-for="Cell in vertCells.slice().reverse()">{{ Cell }}</p>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <tr v-for="Cell_v in vertCells">
+            <td v-for="Cell_h in horizCells" :id="`cell-`+((Cell_v - 1) * 8 + Cell_h)" :class="getCellColor()"></td>
+          </tr>
+        </table>
+        <table>
+          <tr class="tr-dynamic" v-for="Cell_v in vertCells">
+            <div v-for="Cell_h in horizCells" :id="`field-`+((Cell_v - 1) * 8 + Cell_h)" :class="getHighlightColor((Cell_v - 1) * 8 + Cell_h)">
+            </div>
+          </tr>
+        </table>
+        <table>
+          <tr class="tr-dynamic" v-for="Cell_v in vertCells">
+            <div v-for="Cell_h in horizCells" :id="`checker-`+((Cell_v - 1) * 8 + Cell_h)" @click="getCheckerClick" :class="getCheckerClass((Cell_v - 1) * 8 + Cell_h)">
+            </div>
+          </tr>
+        </table>
+      </div>
+      <div class="number" style="transform: rotate(180deg)">
+        <p v-for="Cell in vertCells">{{ Cell }}</p>
+      </div>
     </div>
-  </div>
     <div class="letters">
       <p v-for="Cell in horizCellsNames">{{ Cell }}</p>
     </div>
@@ -28,7 +40,13 @@
 <script>
 
 export default {
-
+/*
+      HTTP.post(`/Authorization/`, username, password)
+        .then((response) => {
+          this.currSession = response.data
+        })
+        .catch(err => {console.log('error')})
+*/
   data() {
 
     return {
@@ -38,13 +56,174 @@ export default {
       defaultTimer: 60,
       timerCount: 60,
 
-      //Текущее состояние хода. 0 = нет выбранной шашки, 1 = выбрана шашка, 2 = обязательно выбрана шашка
+      //Текущее состояние хода. 0 = нет выбранного поля, 1 = выбрано поле, 2 = обязательно выбрано поле
       turnStatus: 0,
 
       //Идентификатор шашки
       lastCheckerID: 0,
 
-      checkers: {},
+      //Множество ходов, которые можно совершить
+      cellsToGo: {},
+
+      //Множество шашек
+      checkers: 
+      {
+          "white":
+          [
+              {
+                  "horiz": 1,
+                  "vertic": 1,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },
+              {
+                  "horiz": 1,
+                  "vertic": 3,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 1,
+                  "vertic": 5,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 1,
+                  "vertic": 7,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 2,
+                  "vertic": 2,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 2,
+                  "vertic": 4,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 2,
+                  "vertic": 6,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 2,
+                  "vertic": 8,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 3,
+                  "vertic": 1,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 3,
+                  "vertic": 3,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 3,
+                  "vertic": 5,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 3,
+                  "vertic": 7,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              }
+          ],
+
+          "black":
+          [
+              {
+                  "horiz": 6,
+                  "vertic": 2,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },
+              {
+                  "horiz": 6,
+                  "vertic": 4,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 6,
+                  "vertic": 6,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 6,
+                  "vertic": 8,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 7,
+                  "vertic": 1,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 7,
+                  "vertic": 3,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 7,
+                  "vertic": 5,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 7,
+                  "vertic": 7,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 8,
+                  "vertic": 2,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 8,
+                  "vertic": 4,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 8,
+                  "vertic": 6,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 8,
+                  "vertic": 8,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              }
+          ]
+      },
 
       //Идентификатор клетки
       lastCellID: 0,
@@ -81,9 +260,9 @@ export default {
       this.numOfCellInRow += 1
 
       if (this.CellColor){ 
-        return "white-backing"
+        return "white-cell"
       }
-      return "gray-backing"
+      return "gray-cell"
     },
     getCheckerClick() {
       alert(event.currentTarget.id)
@@ -92,21 +271,30 @@ export default {
       //Если состояние хода, то вызываем пакет ручек, связанных с началом ходов игроков
     },
 
+    getHighlightColor(id) {
+      const horiz = Math.floor((64 - id) / 8) + 1;
+      const vertic = 8 - ((64 - id) % 8);
+      if (id == 34 || id == 43 || id == 36) {
+        return "highlighted-field"
+      }
+
+
+      return "not-highlighted-field"
+    },
+
     getCheckerID() {
       this.lastCheckerID += 1;
       return this.lastCheckerID;
     },
-    getCheckerClass() {
-      /*
-      let id = event.target.id
-      //id = 8 * vertic + horiz => vertic = id div 8 + 1, horiz = id mod 8 + 1
-      const vertic = Math.floor(id/8);
-      const horiz = (id % 8) + 1;
+    getCheckerClass(id) {
+
+      const horiz = Math.floor((64 - id) / 8) + 1;
+      const vertic = 8 - ((64 - id) % 8);
     
-      for (checker in this.checkers.white) {
-        if (horiz == checker.horiz) {
-          if (vertic == checker.vertic) {
-            if (checker.isQueen == true) {
+      for (let index = 0; index < this.checkers.white.length; index++) {
+        if (horiz == this.checkers.white[index].horiz) {
+          if (vertic == this.checkers.white[index].vertic) {
+            if (this.checkers.white[index].isQueen == true) {
               return "queen-white-piece"
             }
             return "white-piece"
@@ -114,17 +302,16 @@ export default {
         }
       }
 
-      for (checker in this.checkers.black) {
-        if (horiz == checker.horiz) {
-          if (vertic == checker.vertic) {
-            if (checker.isQueen == true) {
+      for (let index = 0; index < this.checkers.black.length; index++) {
+        if (horiz == this.checkers.black[index].horiz) {
+          if (vertic == this.checkers.black[index].vertic) {
+            if (this.checkers.black.isQueen == true) {
               return "queen-black-piece"
             }
             return "black-piece"
           }
         }
       }
-      */
 
       return "null-piece"
     }
@@ -159,7 +346,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .desk {
+  p {
+    margin-bottom: 0;
+  }
+  .number {
+    display: flex;
+    position: relative;
+    justify-content: space-evenly;
+    flex-direction: column;
+    height: 109%;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+  }
+  .letters {
+    display: flex;
+    position: relative;
+    justify-content: space-evenly;
+    width: 100%;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+
+  .full-desk {
     width: 700px;
     height: 700px;
     background-color: #fff;
@@ -171,30 +382,24 @@ export default {
     align-items: center;
     flex-direction: column;
   }
-  .desk-second {
+  .inner-desk {
     display: flex;
     justify-content:space-evenly;
     align-items: center;
     flex-direction: row;
+    width: 100%;
+    height: fit-content;
   }
-  .number {
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 24px;
-    margin-top: 16px;
-    margin-right: 10px;
-  }
-  .number p:not(:first-child) {
-    margin-top: 56px;
-  }
-  .letters {
-    display: flex;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 24px;
-  }
-  .letters p:not(:first-child) {
-    margin-left: 65px;
+
+
+  .table-wrapper {
+    flex-shrink: 0;
+    position: relative;
+    width: 640px;
+    height: 640px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    border: 1px solid #BEBEBE;
   }
   table {
     position: absolute;
@@ -203,53 +408,62 @@ export default {
     width: 100%;
     height: 100%;
   }
-  .tr {
+  .tr-dynamic {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    
+    width:100%;
   }
-  .td {
-    width: 79px;
-    height: 79px;
-    background-color: #bebebe;
-    text-align: center;
-    vertical-align: middle;
-  }
-  .table_div {
-    position: relative;
-    width: 640px;
-    height: 640px;
-    overflow-y: hidden;
-    overflow-x: hidden;
-    border: 1px solid #BEBEBE;
-  }
-  .white-backing {
+
+
+  .white-cell {
     background-color: #fff;
   }
-  .gray-backing {
+  .gray-cell {
     background-color: #BEBEBE;
   }
+
+  .not-highlighted-field {
+    width: 79.75px;
+    height: 79.75px;
+    text-align: center;
+    vertical-align: middle;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  .highlighted-field {
+    width: 79.75px;
+    height: 79.75px;
+    background-color: #FEF499;
+    border: 3px solid #33CC88;
+    border-radius: 3px;
+    text-align: center;
+    vertical-align: middle;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+
   .null-piece {
-    width: 80px;
-    height: 80px;
+    width: 79.75px;
+    height: 79.75px;
     text-align: center;
     vertical-align: middle;
     overflow-x: hidden;
     overflow-y: hidden;
   }
   .white-piece {
-    padding: 10px;
     width: 60px;
     height: 60px;
     background-color: #fff;
-    border: 1px solid #000000;
+    border: 2px solid #777;
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 1);
     border-radius: 50%;
     margin: auto;
     cursor: pointer;
   }
   .black-piece {
-    padding: 10px;
     width: 60px;
     height: 60px;
     background-color: #000000;
@@ -258,24 +472,22 @@ export default {
     margin: auto;
     cursor: pointer;
   }
-   .queen-white-piece {
-    padding: 10px;
-    width: 60px;
-    height: 60px;
-    background-color: red;
-    border: 1px solid #000000;
-    border-radius: 50%;
-    margin: auto;
-    cursor: pointer;
-   }
-   .queen-black-piece {
-    padding: 10px;
-    width: 60px;
-    height: 60px;
-    background-color: purple;
-    border: 1px solid #000000;
-    border-radius: 50%;
-    margin: auto;
-    cursor: pointer;
-   }
+  .queen-white-piece {
+  width: 60px;
+  height: 60px;
+  background-color: red;
+  border: 1px solid #000000;
+  border-radius: 50%;
+  margin: auto;
+  cursor: pointer;
+  }
+  .queen-black-piece {
+  width: 60px;
+  height: 60px;
+  background-color: purple;
+  border: 1px solid #000000;
+  border-radius: 50%;
+  margin: auto;
+  cursor: pointer;
+  }
 </style>
