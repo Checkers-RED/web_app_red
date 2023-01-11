@@ -6,7 +6,7 @@
       <ul>
         <li>
           <span class="status"></span>
-          Статус:
+          Статус: {{ current_status }}
         </li>
         <li>
           <span class="help"></span>
@@ -22,15 +22,38 @@
 </template>
 
 <script>
+  import {HTTP} from '@/assets/http-common.js';
   import { defineComponent } from 'vue';
     
 export default defineComponent({
   data: () => ({
+    timer: null,
     
+    current_status: "в сети"
   }),
   components: {
     
-  },  
+  },
+  methods: {
+    checkFriends() {      
+      HTTP.get(`/TestConnection`)
+        .then(response => {
+          this.current_status = "в сети"
+      })
+        .catch(err => {this.current_status = "не в сети"})
+    }
+  },
+  beforeMount(){
+    this.checkFriends()
+  },
+  mounted: function () {
+    this.timer = setInterval(() => {
+      this.checkFriends()
+    }, 5000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
+  }
 });
 </script>
 
