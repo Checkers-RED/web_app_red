@@ -1,38 +1,30 @@
 <template>
   <p>Набор игровых правил</p>
-    <select @change="handleChange">
-      <option v-for="option in options" :key="option.value">{{option.label}}</option>
-    </select>
-  </template>
+  <select @change="handleChange" v-model="chosen_game">
+    <option v-for="option in options" :value="option.value">{{option.label}}</option>
+  </select>
+</template>
 
-  <script>
-  import { defineComponent, ref } from 'vue';
-  export default defineComponent({
-    setup() {
-      const options = ref([{
-        value: 'russian',
-        label: 'Русские шашки',
-      }, {
-        value: 'english',
-        label: 'Английские шашки',
-      }, {
-        value:'turkey',
-        label: 'Турецкие шашки',
-      }]);
-      const handleChange = value => {
-        console.log(value);
-      };
-  
-      return {
-        value: ref({
-          value: 'russian',
-        }),
-        options,
-        handleChange,
-      };
-    },
-  });
-  </script>
+<script>
+export default {
+  data() {
+    return {
+      options:
+        [{
+          value: 1,
+          label: 'Русские шашки',
+        }, {
+          value: 2,
+          label: 'Английские шашки',
+        }, {
+          value: 3,
+          label: 'Турецкие шашки',
+        }],
+        chosen_game: 1
+      }
+    }
+  }
+</script>
 
 <style lang="scss" scoped>
   p {

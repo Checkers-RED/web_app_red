@@ -6,12 +6,12 @@
       Рейтинговый матч
     </button>
     <div class="panel" v-show="isVisible">
-      <SelectVariant />
-      <button @click="show = !show">
-          <span v-show="!show">Начать поиск</span>
-          <span v-show="show">Остановить поиск </span>
+      <SelectVariant ref="rQueue" />
+      <button @click="enterTheQueue();">
+          <span v-show="!inRankedQueue">Начать поиск</span>
+          <span v-show="inRankedQueue">Остановить поиск </span>
       </button> 
-      <span v-show="show"><sync-outlined spin/></span>
+      <span v-show="inRankedQueue"><sync-outlined spin/></span>
     </div>
     <button class="menu-item" @click="href='#'">
       <div class="tournament"></div>
@@ -43,10 +43,13 @@
 </template>
 
 <script>
+import Cookies from "js-cookie"
+import {HTTP} from '@/assets/http-common.js'
+
 import { defineComponent } from 'vue';
 import { SyncOutlined } from '@ant-design/icons-vue'; 
 
-import SelectVariant from '@/components/SelectVariant'
+import SelectVariant from '@/components/SelectVariant.vue'
 import SettingsButton from '@/components/SettingsButton.vue'
 import Profile from './Profile.vue';
 
@@ -54,11 +57,35 @@ export default defineComponent({
   data: () => ({
     isVisible: false,
     isVisible2: false,
-    show: false,
+    inRankedQueue: false,
+    chosen_game: "text",
   }),
   components: {
     SelectVariant, SyncOutlined, SettingsButton, Profile
   },
+  methods: {
+    enterTheQueue() {
+      let current_session = Cookies.get('current_session')
+
+      let payload = {"current_session": current_session, "rules_id": this.$refs.rQueue.chosen_game }
+
+      //Если не в очереди
+      if (!this.inRankedQueue)
+        HTTP.post(`/InRankedMatch`, payload)
+          .then(response => {
+            this.inRankedQueue = true
+            
+          })
+          
+      //Если в очереди
+      if (this.inRankedQueue)
+        HTTP.post(`/OutRankedMatch`, payload)
+          .then(response => {
+            this.inRankedQueue = false
+
+          })
+    }
+  }
 });
 </script>
 

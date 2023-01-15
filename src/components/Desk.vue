@@ -1,5 +1,5 @@
 <template>
-  <h1>Ваш ход</h1>
+  <h1>Ваш ход: {{ timerCount }}</h1>
   <div class="full-desk">
     <div class="letters" style="transform: rotate(180deg)">
       <p v-for="Cell in horizCellsNames.slice().reverse()">{{ Cell }}</p>
@@ -38,15 +38,11 @@
 </template>
 
 <script>
+import Cookies from "js-cookie"
+import {HTTP} from '@/assets/http-common.js'
 
 export default {
-/*
-      HTTP.post(`/Authorization/`, username, password)
-        .then((response) => {
-          this.currSession = response.data
-        })
-        .catch(err => {console.log('error')})
-*/
+
   data() {
 
     return {
@@ -55,6 +51,12 @@ export default {
       //Таймер по умолчанию и обратный отсчёт
       defaultTimer: 60,
       timerCount: 60,
+
+      //Таймер для фоновых событий
+      fieldTimer: null,
+
+      //Набор правил
+      gameType: "ru",
 
       //Текущее состояние хода. 0 = нет выбранного поля, 1 = выбрано поле, 2 = обязательно выбрано поле
       turnStatus: 0,
@@ -314,8 +316,42 @@ export default {
       }
 
       return "null-piece"
+    },
+
+    getGameInfo() {
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
+      
+      HTTP.post(`/GetGameInfo`, payload)
+        .then(response => {
+          if(response.data.rules_id == 1)
+            this.gameType = "ru"
+          if (response.data.rules_id == 2)
+            this.gameType = "en"
+          if (response.data.rules_id == 3)
+            this.gameType = "tu"
+          this.defaultTimer = response.data.move_time
+          this.timerCount = this.defaultTimer
+      })
+      .catch(error => {
+        this.gameType = "ru"
+        this.defaultTimer = 60,
+        this.timerCount = 60
+      })
     }
 
+  },
+  beforeMount(){
+    this.updateField()
+    this.getGameInfo()
+  },
+  mounted: function () {
+    this.fieldTimer = setInterval(() => {
+      this.updateField()
+    }, 1500)
+  },
+  beforeDestroy() {
+    clearInterval(this.fieldTimer)
   },
   watch: {
     //Обратный отсчёт
@@ -329,17 +365,6 @@ export default {
       },
       immediate: true
     }
-  },
-  //Обновление игрового поля
-  timerCount: {
-    handler(value) {
-      if (value > 0) {
-        setTimeout(() => {
-          updateField()
-        }, 1500);
-      }
-    },
-    immediate: true
   }
 }
 

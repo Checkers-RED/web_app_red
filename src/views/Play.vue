@@ -12,6 +12,9 @@
 </template>
 
 <script>
+import Cookies from "js-cookie"
+import {HTTP} from '@/assets/http-common.js'
+
 import Move from '@/components/Move.vue'
 import Desk from '@/components/Desk.vue';
 
@@ -20,6 +23,32 @@ export default {
   name: 'Play',
   components: {
     Move, Desk
+  },
+  data () {
+    return {
+      timer: null
+    }
+  },
+  methods: {
+    checkIsInMatch() {
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
+      
+      HTTP.post(`/IsInMatch`, payload)
+        .then(response => {
+          if (response.data.status == false) {
+            //this.$router.push('/')
+          }
+      })
+    }
+  },
+  mounted: function () {
+    this.timer = setInterval(() => {
+      this.checkIsInMatch()
+    }, 5000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
   }
   
 }

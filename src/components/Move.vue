@@ -3,12 +3,12 @@
   <div class="move">
     <ul id="list">
       <li v-for="move in moves" :key="move">
-        {{ move.move }}
+        {{ move.note }}
       </li>
     </ul>
     
     <div class="opponent">
-      <Profile />
+      <Opponent />
       <GiveUp />
     </div>
     <div class="nickname">
@@ -21,21 +21,42 @@
 <script>
 import SettingsButton from '@/components/SettingsButton.vue'
 import Profile from '@/components/Profile.vue'
+import Opponent from '@/components/Opponent.vue'
 import GiveUp from '@/components/GiveUp.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    SettingsButton, Profile, GiveUp
+    SettingsButton, Profile, Opponent, GiveUp
   },
   data () {
     return {
       moves: [
-        {move: 'A2-G4 B6-A5'},
-        {move: 'B2-A3 '}
+        {note: 'A2-G4 B6-A5'},
+        {note: 'B2-A3 '}
       ]
     }
-  }  
+  },
+  methods: {
+    GetMoves() {
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
+      let result_moves = ""
+      
+      HTTP.post(`/GetMoves`, payload)
+        .then(response => {
+          this.moves = response.data
+      })
+    }
+  },
+  mounted: function () {
+    this.timer = setInterval(() => {
+      this.GetMoves()
+    }, 5000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
+  }
 }
 
 </script>

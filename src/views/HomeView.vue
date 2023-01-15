@@ -13,6 +13,9 @@
 </template>
 
 <script>
+import Cookies from "js-cookie"
+import {HTTP} from '@/assets/http-common.js'
+
 import ListMenu from '@/components/ListMenu'
 import Friends from '@/components/Friends.vue'
 
@@ -21,6 +24,32 @@ export default {
   name: 'HomeView',
   components: {
     ListMenu, Friends, 
+  },
+  data () {
+    return {
+      timer: null
+    }
+  },
+  methods: {
+    checkIsInMatch() {
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
+      
+      HTTP.post(`/IsInMatch`, payload)
+        .then(response => {
+          if (response.data.status == true) {
+            //this.$router.push('/play')
+          }
+      })
+    }
+  },
+  mounted: function () {
+    this.timer = setInterval(() => {
+      this.checkIsInMatch()
+    }, 5000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
   }
   
 }
