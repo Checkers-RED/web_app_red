@@ -25,7 +25,7 @@ export default {
       
       HTTP.post(`/GetNotifs`, payload)
         .then(response => {
-          this.friends = response.data
+          this.notifications = response.data
       })
     }
   },
@@ -43,12 +43,12 @@ export default {
 <style lang="scss" scoped>
   .notify {
     width: 500px;
-    height: 280px;
+    height: 273px;
     background: #FFFFFF;
     border: 1px solid #E0E0E0;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
     border-radius: 11px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   ::-webkit-scrollbar {
     width: 6px;
