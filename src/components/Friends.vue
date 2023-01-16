@@ -3,32 +3,32 @@
     <h1>Список друзей</h1>
     <div class="friends">
       <ul>
-        <template v-for="friend in friends" :id="friend.id" :key="friend" >
-        <li @click="isVisible=!isVisible">
-          <div class="avatar"> <img src="" width="45" height="45"> </div>
-          {{friend.nick}}
-          <div class="btn-group">
-            <button class="info"></button>
-            <button class="delete"></button>
-          </div>
-        </li> 
-        <div class="panel" v-show="isVisible">
-          <SelectVariant />
-          <p>Время на ход (секунды)</p>
-          <div class="time">
-            <input type="number" name="time" min="10" max="60" step="5" value="30">
-            <div class="btn">
-              <span v-show="show"><sync-outlined spin/></span>
-              <button @click="show = !show">
-                  <span v-show="!show">Отправить приглашение</span>
-                  <span v-show="show">Ожидание ответа...</span>
-              </button>
+        <template v-for="friend in friends" :id="friend.uid" :key="friend" >
+          <li @click="changeVisibility(friend.uid)">
+            <div class="avatar"> <img :src="friend.photo" width="45" height="45"> </div>
+            {{friend.nick}}
+            <div class="btn-group">
+              <button class="info" @click="changeVisibility(friend.uid);"></button>
+              <button class="delete" @click="changeVisibility(friend.uid); removeFriend(friend.uid)"></button>
             </div>
-          </div>         
-        </div>
+          </li> 
+          <div class="panel" v-show="isVisible[friend.uid - 1]">
+            <SelectVariant />
+            <p>Время на ход (секунды)</p>
+            <div class="time">
+              <input type="number" name="time" min="10" max="60" step="5" value="30">
+              <div class="btn">
+                <span v-show="show"><sync-outlined spin/></span>
+                <button @click="show = !show">
+                    <span v-show="!show">Отправить приглашение</span>
+                    <span v-show="show">Ожидание ответа...</span>
+                </button>
+              </div>
+            </div>         
+          </div>
         </template>     
       </ul>
-      <button class="addfriend" @click="isOpen=!isOpen">
+      <button class="searchForFriends" @click="switchInterface()">
         <div class="add"></div>
         Добавить друга        
       </button>      
@@ -38,24 +38,27 @@
 
   <div v-else>
     <h1>Поиск друга</h1>
-  <div class="find">
-    <button class="back" @click="isOpen=!isOpen">
-      <div class="backicon"></div> 
-      Вернуться к окну входа
-    </button>
-    <div class="input-container">
-      <i class="icon"></i>
-      <input v-model="nick" type="text" placeholder="Имя пользователя" name="uname">
-    </div> 
-    <div class="found">
-      <div class="avatar"> <img :src="friend.photo" width="45" height="45"> </div>
-      {{found.nick}}
-      <div class="btn-group">
-        <button class="info"></button>
-        <button class="toAdd"></button>
-      </div>
+    <div class="find">
+      <button class="back" @click="isOpen=!isOpen; isFound=false; nick=''; ">
+        <div class="backicon"></div> 
+        Вернуться к окну входа
+      </button>
+      <div class="input-container">
+        <i class="icon"></i>
+        <input v-model="nick" type="text" placeholder="Имя пользователя" name="uname">
+      </div> 
+      <ul v-if="isFound">
+        <li>
+          <div class="avatar"> <img :src="found.photo" width="45" height="45"> </div>
+          {{found.nick}}
+          <div class="btn-group">
+            <button class="info"></button>
+            <button class="toAdd" v-if="!isFriend(found.uid)" @click="addFriend(found.uid)"></button>
+            <button class="delete" v-if="isFriend(found.uid)" @click="removeFriend(found.uid)"></button>
+          </div>
+        </li>
+      </ul>
     </div>
-  </div>
   </div>
 </template>
 
@@ -71,21 +74,44 @@
     timer: null,
 
     isOpen: true,
-    isVisible: false,
+    isVisible: [],
     show: false,
 
     currSession: "",
     nick: "",
-    found: "",
 
-  
-    friends: []
+    friends: [],
+    found: {},
+
+    isFound: false
     
   }),
   components: {
     Notifications, SelectVariant, SyncOutlined
   },
   methods: {
+    switchInterface() {
+      this.isOpen = !this.isOpen;
+
+      for (let index = 0; index < this.isVisible.length; index++) {
+        this.isVisible[index] = false;
+      }
+
+    },
+    changeVisibility(id) {
+
+      while (this.isVisible.length < id) {
+        this.isVisible.push(false)
+      }
+
+      for (let index = 0; index < this.isVisible.length; index++) {
+        if (index != id - 1)
+          this.isVisible[index] = false;
+      }
+      this.isVisible[id - 1] = !this.isVisible[id - 1]
+    },
+    
+
     checkFriends() {
       let current_session = Cookies.get('current_session')
       let payload = {"current_session": current_session}
@@ -94,15 +120,53 @@
         .then(response => {
           this.friends = response.data
       })
+    },
+    findUser() {
+      this.isFound=false
+      let payload = {"nick": this.nick}
+      
+      HTTP.post(`/SearchUser`, payload)
+        .then(response => {
+          this.found = response.data
+          this.isFound=true
+      }).catch(error => {})
+    },
+    isFriend(id) {
+      for (let index = 0; index < this.friends.length; index++) {
+        if (id == this.friends[index].uid)
+          return true
+      }
+      return false
+    },
+
+    addFriend(id) {
+      let current_session = Cookies.get('current_session')
+      let payload = {"cur_session": current_session, "f_id": id}
+      
+      HTTP.post(`/AddFriend`, payload)
+        .then(response => {
+          alert("Friend added")
+          this.checkFriends()
+      })
+    },
+    removeFriend(id) {
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session, "f_id": id}
+      
+      HTTP.post(`/DeleteFriend`, payload)
+        .then(response => {
+          alert("Friend removed")
+          this.checkFriends()
+      })
+    }
+  },
+  watch: {
+    nick: function() {
+      this.findUser()
     }
   },
   beforeMount(){
     this.checkFriends()
-  },
-  mounted: function () {
-    this.timer = setInterval(() => {
-      this.checkFriends()
-    }, 5000)
   },
   beforeDestroy() {
     clearInterval(this.timer)
@@ -112,6 +176,9 @@
 </script>
 
 <style lang="scss" scoped>
+  ul {
+    padding: 0px;
+  }
   .friends {
     width: 500px;
     height: 340px;
@@ -122,20 +189,9 @@
     margin-bottom: 25px;
     overflow-y: auto;
   }
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #e6e6e6;
-  }
-  ::-webkit-scrollbar-thumb {
-      background: #bebebe;
-      border-radius: 11px;
-  }
   .friends li {
     height: 75px;
-    width: 494px;
-    margin: 0 -40px;
+    width: 100%;
     padding: 15px;
     list-style: none;
     display: flex;
@@ -147,6 +203,40 @@
   }
   .friends li:hover {
     background-color: #e6e6e6;
+  }
+  .find {
+    width: 500px;
+    height: 700px;
+    position: relative;
+    display: flex;
+    margin-top: 0;
+    flex-direction: column;
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 11px;
+  }
+  .find li {
+    height: 75px;
+    width: 100%;
+    padding: 15px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    border-bottom: 1px solid #E0E0E0;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #e6e6e6;
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #bebebe;
+      border-radius: 11px;
   }
   .avatar {
     width: 45px;
@@ -181,12 +271,14 @@
     background-color: #9AFF89;
     border-radius: 0px 17.5px 17.5px 0px;
   }
+  .toAdd:hover {
+    background-color: #72D761;
+  }
   .delete:hover {
     background-color: #ff5b5b;
   }
   .panel {
-    width: 500px;
-    margin: 0 -40px;
+    width: 100%;
     padding: 15px;
     border-bottom: 1px solid #E0E0E0;
   }
@@ -224,7 +316,7 @@
   }
   .time input {
     height: 45px;
-    width: 60px;
+    width: 90px;
     text-align: center;
     border-radius: 0;
     border: 1px solid #E0E0E0;
@@ -232,7 +324,7 @@
     font-size: 20px;
     line-height: 24px;
   }
-  .addfriend {
+  .searchForFriends {
     height: 75px;
     width: 100%;
     margin: -15px 0;
@@ -248,7 +340,7 @@
     border-bottom: 1px solid #E0E0E0;
     background: #FFFFFF;
   }
-  .addfriend:hover {
+  .searchForFriends:hover {
     background: #e6e6e6;
   }
   .add {
@@ -258,18 +350,6 @@
     border-radius: 50%;
     border: 1px solid #E0E0E0;
     margin-right: 12px;
-  }
-  .find {
-    width: 500px;
-    height: 700px;
-    position: relative;
-    display: flex;
-    margin-top: 0;
-    flex-direction: column;
-    background: #FFFFFF;
-    border: 1px solid #E0E0E0;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
-    border-radius: 11px;
   }
   .input-container { 
     height: 75px;   
