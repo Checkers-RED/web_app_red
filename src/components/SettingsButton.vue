@@ -3,16 +3,16 @@
     <button>        
     </button>
     <template #overlay>
-      <ul>
+      <ul style="overflow:hidden">
         <li>
           <span class="status"></span>
           Статус: {{ current_status }}
         </li>
-        <li>
+        <li class = "interactive">
           <span class="help"></span>
           Помощь
         </li>  
-        <li>
+        <li class = "interactive" @click="endSession()">
           <span class="exit"></span>
           Выйти из учетной записи
         </li>          
@@ -22,8 +22,10 @@
 </template>
 
 <script>
-  import {HTTP} from '@/assets/http-common.js';
-  import { defineComponent } from 'vue';
+import {HTTP} from '@/assets/http-common.js';
+import Cookies from "js-cookie"
+
+import { defineComponent } from 'vue';
     
 export default defineComponent({
   data: () => ({
@@ -41,6 +43,10 @@ export default defineComponent({
           this.current_status = "в сети"
       })
         .catch(err => {this.current_status = "не в сети"})
+    },
+    endSession() {
+          Cookies.remove("current_session")
+          this.$router.push('/login');
     }
   },
   beforeMount(){
@@ -71,8 +77,9 @@ export default defineComponent({
     background-color: #bebebe;
   }
   ul {
+    padding: 0px;
     width: 340px;
-    height: 178px;
+    height: fit-content;
     border: 1px solid #E0E0E0;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
     border-radius: 11px;
@@ -80,8 +87,8 @@ export default defineComponent({
   }
   li {
     height: 60px;
-    margin-left: -40px;
-    padding: 15px 10px;
+    width: 100%;
+    padding-left: 15px;
     list-style: none;
     font-weight: 400;
     font-size: 20px;
@@ -105,6 +112,12 @@ export default defineComponent({
   }
   .exit {
     background: url(/public/img/icons/application-exit-symbolic.symbolic.png) no-repeat center/25px;
+    background-color: #e6e6e6;
+  }
+  .interactive {
+    background-color: #fff;
+  }
+  .interactive:hover {
     background-color: #e6e6e6;
   }
 </style>
