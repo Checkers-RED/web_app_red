@@ -7,6 +7,7 @@
 
 <script>
 export default {
+  props: ['get_game'],
   data() {
     return {
       options:
@@ -22,8 +23,13 @@ export default {
         }],
         chosen_game: 1
       }
+    },
+  watch: {
+    chosen_game: function() {
+      this.get_game = this.chosen_game
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

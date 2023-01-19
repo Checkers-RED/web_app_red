@@ -6,7 +6,7 @@
       Рейтинговый матч
     </button>
     <div class="panel" v-show="isVisible">
-      <SelectVariant ref="rQueue" />
+      <SelectVariant ref="rankedGameVariant" />
       <button @click="enterTheQueue();">
           <span v-show="!inRankedQueue">Начать поиск</span>
           <span v-show="inRankedQueue">Остановить поиск </span>
@@ -28,7 +28,7 @@
       Игра с ботом
     </button>
     <div class="panel" v-show="isVisible2">
-      <SelectVariant />
+      <SelectVariant ref="botGameVariant" />
       <p>Время на ход (секунды)</p>
       <div class="time">
         <input type="number" name="time" min="10" max="60" step="5" value="30">      
@@ -67,7 +67,7 @@ export default defineComponent({
     enterTheQueue() {
       let current_session = Cookies.get('current_session')
 
-      let payload = {"current_session": current_session, "rules_id": this.$refs.rQueue.chosen_game }
+      let payload = {"current_session": current_session, "rules_id": this.$refs.rankedGameVariant.chosen_game }
 
       //Если не в очереди
       if (!this.inRankedQueue)

@@ -13,13 +13,13 @@
             </div>
           </li> 
           <div class="panel" v-show="isVisible[friend.uid - 1]">
-            <SelectVariant />
+            <SelectVariant get_game="chosen_game" />
             <p>Время на ход (секунды)</p>
             <div class="time">
-              <input type="number" name="time" min="10" max="60" step="5" value="30">
+              <input type="number" v-model="moveTimer" name="time" min="10" max="600" step="5">
               <div class="btn">
                 <span v-show="show"><sync-outlined spin/></span>
-                <button @click="show = !show">
+                <button @click="inviteFriend(friend.uid)">
                     <span v-show="!show">Отправить приглашение</span>
                     <span v-show="show">Ожидание ответа...</span>
                 </button>
@@ -83,7 +83,10 @@
     friends: [],
     found: {},
 
-    isFound: false
+    isFound: false,
+    moveTimer: 60,
+
+    chosen_game: 0
     
   }),
   components: {
@@ -158,7 +161,37 @@
           alert("Friend removed")
           this.checkFriends()
       })
+    },
+    inviteFriend(id) {
+      this.show = !this.show
+      let current_session = Cookies.get('current_session')
+
+      //let payload = { "current_session": current_session, "rules_id": this.$refs.userGameVariant.chosen_game }
+      console.log(this.chosen_game)
+
+      /*
+      //Если не в очереди
+      if (!this.inRankedQueue)
+        HTTP.post(`/InRankedMatch`, payload)
+          .then(response => {
+            this.inRankedQueue = true
+            
+          })
+          
+      //Если в очереди
+      if (this.inRankedQueue)
+        HTTP.post(`/OutRankedMatch`, payload)
+          .then(response => {
+            this.inRankedQueue = false
+
+          })
+          */
     }
+  },
+  mounted: function () {
+    this.timer = setInterval(() => {
+      this.checkFriends()
+    }, 5000)
   },
   watch: {
     nick: function() {

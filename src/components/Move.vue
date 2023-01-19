@@ -19,6 +19,9 @@
 </template>
 
 <script>
+import Cookies from "js-cookie"
+import {HTTP} from '@/assets/http-common.js'
+
 import SettingsButton from '@/components/SettingsButton.vue'
 import Profile from '@/components/Profile.vue'
 import Opponent from '@/components/Opponent.vue'
@@ -31,6 +34,7 @@ export default {
   },
   data () {
     return {
+      timer: null,
       moves: [
         {note: 'A2-G4 B6-A5'},
         {note: 'B2-A3 '}

@@ -48,8 +48,6 @@ export default {
           this.currSession = response.data.current_session
           this.$router.push('/');
         })
-        .catch(err => {console.log('error')})
-      console.log('login')
     },
 
     doPing() {
