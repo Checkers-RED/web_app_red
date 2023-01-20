@@ -86,8 +86,20 @@ import { Alert } from 'ant-design-vue';
 </script>
 
 <style lang="scss" scoped>    
+@media screen and (min-width: 1000px) {
   .container {
     width: 500px;
+  }
+  .mobile {
+    display: none;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .container {
+    width: 95%;
+  }
+}
+  .container {
     height: 520px;
     margin: auto;     
     background: #FFFFFF;

@@ -16,6 +16,7 @@
         <a href="/forgot" class="btn forgot">Забыли пароль?</a>
         <a href="/registration" class="btn registration">Регистрация</a>
         <button class="btn login" @click="login">Вход</button>
+        <button class="btn mobile" @click="login"></button>
       </div>    
     </div>
   </div>
@@ -75,7 +76,6 @@ export default {
 
 <style lang="scss" scoped>    
   .container {
-    width: 500px;
     height: 225px;
     margin: auto;     
     background: #FFFFFF;
@@ -167,4 +167,45 @@ export default {
     width: 94px;
     border-radius: 0px 11px 11px 0px;
   }
+  
+@media screen and (min-width: 1000px) {
+  .container {
+    width: 500px;
+  }
+  .mobile {
+    display: none;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .container {
+    width: 95%;
+  }
+  h1 {
+    text-align: center;
+  }
+  .btn-group {
+    padding: 10px;
+    width: 100%; 
+  }
+  .btn {
+    font-size: 18px;
+  }
+  .forgot {    
+    width: 40%;
+    padding: 10px 0;
+  }
+  .registration {
+    width: 33%;
+    padding: 10px 0;
+  }
+  .mobile {
+    width: 45px;
+    border-radius: 0px 11px 11px 0px;
+    background: url(/public/img/icons/log-in.png) no-repeat center/25px;
+    background-color: #e6e6e6;
+  }
+  .login {
+    display: none;
+  }
+}
 </style>
