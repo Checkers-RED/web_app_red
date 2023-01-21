@@ -67,4 +67,19 @@ export default {
     flex: 50%;
     margin-left: 60px;
   }
+
+  @media screen and (max-width: 1000px) {
+    .row {
+      display: flex;
+      flex-direction: column;
+    }
+    .col-1 {
+      flex: 100%;
+      margin-right: 0%;
+    }
+    .col-2 {
+      flex: 100%;
+      margin-left: 0%;
+    }
+  }
 </style>

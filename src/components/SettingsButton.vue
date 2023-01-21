@@ -64,11 +64,27 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 1000px) {
+  button {
+    border-radius: 0 50% 50% 0;    
+    width: 45px;
+  }
+  li {
+    font-size: 18px;
+  }
+}
+@media screen and (min-width: 1000px) {
+  button {
+    border-radius: 50%;    
+    width: 45px;
+  }
+  li {
+    font-size: 20px;
+  }
+}
   button {
     float: right;
-    width: 45px;
     height: 45px;
-    border-radius: 50%;
     border: 1px solid #E0E0E0;        
     background: url(/public/img/icons/applications-system-symbolic.symbolic.png) no-repeat center/25px;
     background-color: #e6e6e6;
@@ -91,7 +107,6 @@ export default defineComponent({
     padding-left: 15px;
     list-style: none;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
     display: flex;
     align-items: center;
