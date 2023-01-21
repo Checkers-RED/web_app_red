@@ -33,16 +33,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 1000px) {
+  p {
+    font-size: 18px;
+  }
+  select { 
+    font-size: 18px;
+  }
+}
+@media screen and (min-width: 1000px) {
+  p {
+    font-size: 20px;
+  }
+  select { 
+    font-size: 20px;
+  }
+}
   p {
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
   }
   select {
-    width: 470px;
+    width: 100%;
     height: 60px;
-    font-weight: 400;    
-    font-size: 20px; 
+    font-weight: 400;
     line-height: 24px;
     padding: 15px;
     background: #E6E6E6;

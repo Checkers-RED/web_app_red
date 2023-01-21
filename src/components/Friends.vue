@@ -33,7 +33,9 @@
         Добавить друга        
       </button>      
     </div>
+    <div class="notifs">
     <Notifications />
+    </div>
   </div>
 
   <div v-else>
@@ -209,12 +211,76 @@
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 1000px) {
+  .friends {
+    width: 100%;    
+    margin-bottom: 25px;
+    height: 340px;
+  }
+  .friends li {
+    width: 100%;
+    font-size: 18px;
+  }
+  .find {
+    height: 340px;
+  }
+  .time button {
+    font-size: 18px; 
+  }
+  .panel p {
+    font-size: 18px;
+  }
+  .time input {
+    font-size: 18px;
+  }
+  .searchForFriends {
+    font-size: 18px;
+  }
+  input {
+    font-size: 18px;
+  }
+  .back {
+    font-size: 18px;
+  }
+  .notifs {
+    display: none;
+  }
+}
+@media screen and (min-width: 1000px) {
+  .friends {
+    width: 500px;
+    height: 340px;
+  }
+  .friends li {
+    width: 100%;
+    font-size: 20px;
+  }
+  .find {
+    height: 700px;
+  }
+  .time button {
+    font-size: 20px; 
+  }
+  .panel p {
+    font-size: 20px;
+  }
+  .time input {
+    font-size: 20px;
+  }
+  .searchForFriends {
+    font-size: 20px;
+  }
+  input {
+    font-size: 20px;
+  }
+  .back {
+    font-size: 20px;
+  }
+}
   ul {
     padding: 0px;
   }
   .friends {
-    width: 500px;
-    height: 340px;
     background: #FFFFFF;
     border: 1px solid #E0E0E0;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
@@ -224,13 +290,11 @@
   }
   .friends li {
     height: 75px;
-    width: 100%;
     padding: 15px;
     list-style: none;
     display: flex;
     align-items: center;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
     border-bottom: 1px solid #E0E0E0;
   }
@@ -238,8 +302,7 @@
     background-color: #e6e6e6;
   }
   .find {
-    width: 500px;
-    height: 700px;
+    width: 100%;
     position: relative;
     display: flex;
     margin-top: 0;
@@ -331,7 +394,6 @@
     border: none;
     border-radius: 11px;
     padding: 0px 15px;
-    font-size: 20px; 
     line-height: 24px;
     margin-left: auto;
   }
@@ -354,7 +416,6 @@
     border-radius: 0;
     border: 1px solid #E0E0E0;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
   }
   .searchForFriends {
@@ -366,7 +427,6 @@
     display: flex;
     align-items: center;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
     border: none;
     border-top: 1px solid #E0E0E0;
@@ -408,7 +468,6 @@
     border: 1px solid #e0e0e0;  
     border-radius: 0 11px 11px 0;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px; 
   }
   .back {
@@ -416,7 +475,6 @@
     width: 100%;
     padding: 15px;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;  
     text-align: left;
     display: flex;

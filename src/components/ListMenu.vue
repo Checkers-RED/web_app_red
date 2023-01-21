@@ -1,6 +1,12 @@
 <template>
-  <h1>Главное меню</h1>
-  <div class="menu">
+  <h1 v-show="!openNotifs">Главное меню</h1>
+  <h1 v-show="openNotifs">Уведомления</h1>
+  <div class="menu" v-show="!openNotifs">
+    <div class="mobile">
+      <Profile />
+      <button class="btnNotifs" @click="openNotifs=!openNotifs"></button>
+      <SettingsButton />
+    </div>
     <button class="menu-item" @click="isVisible=!isVisible; isVisible2=false">
       <div class="match"></div>
       Рейтинговый матч
@@ -31,7 +37,7 @@
       <SelectVariant ref="botGameVariant" />
       <p>Время на ход (секунды)</p>
       <div class="time">
-        <input type="number" name="time" min="10" max="60" step="5" value="30">      
+        <input type="number" name="time" min="10" max="60" step="5" value="60">      
         <button>Начать игру</button>
       </div> 
     </div>    
@@ -39,6 +45,15 @@
       <Profile />
       <SettingsButton />
     </div>
+  </div>
+  
+  <div class="notifs" v-show="openNotifs"> 
+    <div class="mobile notify">
+      <Profile />
+      <button class="btnNotifs" @click="openNotifs=!openNotifs"></button>
+      <SettingsButton />
+    </div>
+    <Notifications /> 
   </div>
 </template>
 
@@ -51,17 +66,19 @@ import { SyncOutlined } from '@ant-design/icons-vue';
 
 import SelectVariant from '@/components/SelectVariant.vue'
 import SettingsButton from '@/components/SettingsButton.vue'
+import Notifications from '@/components/Notifications.vue';
 import Profile from './Profile.vue';
 
 export default defineComponent({
   data: () => ({
     isVisible: false,
     isVisible2: false,
+    openNotifs: false,
     inRankedQueue: false,
     chosen_game: "text",
   }),
   components: {
-    SelectVariant, SyncOutlined, SettingsButton, Profile
+    SelectVariant, SyncOutlined, SettingsButton, Notifications, Profile
   },
   methods: {
     enterTheQueue() {
@@ -90,12 +107,105 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 1000px) {
+  .menu {
+    width: 100%;
+    height: 380px;
+    overflow: auto;
+    margin-bottom: 25px;
+  }
+  .menu-item {
+    min-height: 75px;
+    font-size: 18px;   
+    border: none; 
+    border-top: 1px solid #E0E0E0;
+  }  
+  .panel button {
+    font-size: 18px;
+  }
+  .panel p {
+    font-size: 18px;
+  }
+  .time input {
+    font-size: 20px;
+  }
+  .nickname {
+    display: none;
+  }
+  .mobile {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 75px;
+    border-radius: 11px 11px 0 0;
+    background-color: #FFFFFF;
+    padding: 15px;
+    display: flex;
+    align-items: center;   
+  }
+  .notifs {
+    width: 373px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+    border: 1px solid #E0E0E0;
+    border-radius: 11px;
+    margin-bottom: 25px;
+  }
+  .btnNotifs {
+    width: 45px;
+    height: 45px;
+    border: 1px solid #E0E0E0;
+    background: url(/public/img/icons/preferences-system-notifications-symbolic.symbolic.png) no-repeat center/25px;
+    background-color: #e6e6e6;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #e6e6e6;
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #bebebe;
+      border-radius: 11px;
+  }
+}
+@media screen and (min-width: 1000px) {
   .menu {
     width: 500px;
-    height: 700px;
+    height: 700px;    
+  }
+  .menu-item {
+    font-size: 20px;
+    border: none;
+    border-bottom: 1px solid #E0E0E0;
+  }
+  .menu-item:first-of-type {
+    border-radius: 11px 11px 0px 0px;
+  }
+  .panel button {
+    font-size: 18px;
+  }
+  .panel p {
+    font-size: 20px;
+  }
+  .time input {
+    font-size: 20px;
+  }  
+  .nickname {
+    width: 500px; 
+    height: 75px;   
+    position: absolute;
+    bottom: 0;       
+    border-top: 1px solid #E0E0E0;
+    padding: 15px;
+    display: flex;
+  }
+  .mobile {
+    display: none;
+  }
+}
+  .menu {
     position: relative;
     display: flex;
-    margin-top: 0;
     flex-direction: column;
     background: #FFFFFF;
     border: 1px solid #E0E0E0;
@@ -108,10 +218,7 @@ export default defineComponent({
     display: flex;
     align-items: center;
     background: #FFFFFF;
-    border: none;
-    border-bottom: 1px solid #E0E0E0;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
     padding: 0px 15px;
     text-align: left;
@@ -120,9 +227,6 @@ export default defineComponent({
   .menu-item:hover {
     background-color: #e6e6e6;
   }  
-  .menu-item:first-child {
-    border-radius: 11px 11px 0px 0px;
-  }
   .menu-item div {
     float: left;
     width: 45px;
@@ -150,7 +254,6 @@ export default defineComponent({
     border-radius: 11px;
     margin-top: 20px;
     padding: 0px 15px;
-    font-size: 20px; 
     line-height: 24px
   }
   .panel button:hover {
@@ -166,7 +269,6 @@ export default defineComponent({
   .panel p {
     padding-top: 24px;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
   }
   .time {
@@ -183,16 +285,6 @@ export default defineComponent({
     text-align: center;
     border: 1px solid #E0E0E0;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
   }  
-  .nickname {
-    width: 500px; 
-    height: 75px;   
-    position: absolute;
-    bottom: 0;       
-    border-top: 1px solid #E0E0E0;
-    padding: 15px;
-    display: flex;
-  }
 </style>
