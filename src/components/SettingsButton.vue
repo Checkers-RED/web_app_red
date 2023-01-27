@@ -135,4 +135,11 @@ export default defineComponent({
   .interactive:hover {
     background-color: #e6e6e6;
   }
+  .status {
+    width: 15px;
+    height: 15px;
+    background-color: #A0FF55;
+    margin-left: 15px;
+    margin-right: 25px;
+  }
 </style>

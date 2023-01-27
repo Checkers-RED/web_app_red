@@ -256,6 +256,7 @@
     font-size: 20px;
   }
   .find {
+    width: 500px;
     height: 700px;
   }
   .time button {
@@ -302,7 +303,6 @@
     background-color: #e6e6e6;
   }
   .find {
-    width: 100%;
     position: relative;
     display: flex;
     margin-top: 0;

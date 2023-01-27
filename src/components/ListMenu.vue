@@ -19,12 +19,12 @@
       </button> 
       <span v-show="inRankedQueue"><sync-outlined spin/></span>
     </div>
-    <button class="menu-item" @click="href='#'">
+    <button class="menu-item" @click="joinTournament">
       <div class="tournament"></div>
       Присоединиться к турниру
     </button>
     
-    <button class="menu-item" @click="href='#'">
+    <button class="menu-item" @click="createTournament">
       <div class="create"></div>
       Создать пользовательский турнир
     </button>
@@ -101,7 +101,13 @@ export default defineComponent({
             this.inRankedQueue = false
 
           })
-    }
+    },
+    joinTournament() {
+      this.$router.push('/tournament');
+    },
+    createTournament() {
+      this.$router.push('/createtournament');
+    },
   }
 });
 </script>
