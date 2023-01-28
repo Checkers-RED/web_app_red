@@ -36,13 +36,13 @@ export default {
             this.score = response.data.score
             this.photo = response.data.photo
           })
-          .catch(error => {
+          /*.catch(error => {
             this.$router.push('/login');
-          })
+          })*/
         
-      } else {
+      } /*else {
         this.$router.push('/login');
-      }
+      }*/
     }
   },
  beforeMount(){

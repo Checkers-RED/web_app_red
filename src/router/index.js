@@ -26,7 +26,17 @@ const routes = [
     path: '/play',
     name: 'play',
     component: () => import('../views/Play.vue')
-  }
+  },
+  {
+    path: '/tournament',
+    name: 'tournament',
+    component: () => import('../views/Tournament.vue')
+  },
+  {
+    path: '/createtournament',
+    name: 'createtournament',
+    component: () => import('../views/CreateTournament.vue')
+  },
 ]
 
 const router = createRouter({
