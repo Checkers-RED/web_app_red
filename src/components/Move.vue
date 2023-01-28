@@ -1,5 +1,5 @@
 <template>
-  <h1>Совершённые ходы</h1>
+  <h1>Оставшееся время: {{ timerCount }}</h1>
   <div class="move">
     <ul id="list">
       <li v-for="move in moves" :key="move">
@@ -34,11 +34,10 @@ export default {
   },
   data () {
     return {
+      timerCount: 60,
+      fieldTimer: null,
       timer: null,
-      moves: [
-        {note: 'A2-G4 B6-A5'},
-        {note: 'B2-A3 '}
-      ]
+      moves: []
     }
   },
   methods: {
@@ -51,9 +50,20 @@ export default {
         .then(response => {
           this.moves = response.data
       })
+    },
+    reduceTimer() {
+      if (this.timerCount > 0)
+        this.timerCount -= 1
     }
   },
-  mounted: function () {
+  beforeMount() {
+    this.GetMoves()
+  },
+  mounted() {
+    this.fieldTimer = setInterval(() => {
+      this.reduceTimer()
+    }, 1000)
+
     this.timer = setInterval(() => {
       this.GetMoves()
     }, 5000)

@@ -1,5 +1,5 @@
 <template>
-  <h1>Ваш ход: {{ timerCount }}</h1>
+  <h1>Ваш ход</h1>
   <div class="full-desk">
     <div class="letters" style="transform: rotate(180deg)">
       <p v-for="Cell in horizCellsNames.slice().reverse()">{{ Cell }}</p>
@@ -39,34 +39,13 @@
 
 <script>
 import Cookies from "js-cookie"
-import {HTTP} from '@/assets/http-common.js'
+import {HTTP, HTTP_game} from '@/assets/http-common.js'
 
 export default {
 
   data() {
 
     return {
-      activeColor: "white", //поправить
-
-      //Таймер по умолчанию и обратный отсчёт
-      defaultTimer: 60,
-      timerCount: 60,
-
-      //Таймер для фоновых событий
-      fieldTimer: null,
-
-      //Набор правил
-      gameType: "ru",
-
-      //Текущее состояние хода. 0 = нет выбранного поля, 1 = выбрано поле, 2 = обязательно выбрано поле
-      turnStatus: 0,
-
-      //Идентификатор шашки
-      lastCheckerID: 0,
-
-      //Множество ходов, которые можно совершить
-      cellsToGo: {},
-
       //Множество шашек
       checkers: 
       {
@@ -234,6 +213,37 @@ export default {
       numOfCellInRow: 0,
       CellColor: false,
 
+      //Идентификатор шашки
+      lastCheckerID: 0,
+      
+      //Таймер по умолчанию и обратный отсчёт
+      defaultTimer: 60,
+
+      //Таймер для фоновых событий
+      fieldTimer: null,
+
+      //Цвет шашек игрока
+      color: "white",
+
+      //Цвет шашек игрока текущего хода
+      activeColor: "white",
+
+      //Набор правил
+      gameType: "ru",
+
+      //Текущее состояние хода. 0 = нет выбранного поля, 1 = выбрано поле, 2 = обязательно выбрано поле
+      turnStatus: 0,
+
+      //Множество ходов, которые можно совершить
+      cellsToGo: [],
+
+      //Все дамки на поле
+      queensOnField: [],
+
+      //Вертикаль и горизонталь нажатой шашки
+      clickedHoriz: -1,
+      clickedVertic: -1,
+
       //Задаёт количество клеток игрового поля, а также их именование
       horizCellsNames: ["A", "B", "C", "D", "E", "F", "G", "H"],
       horizCells: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -243,8 +253,16 @@ export default {
   methods: {
     updateField() {
       //Обновление всего поля
-      //Составляем запрос с помощью axios
-      //Записываем результат в checkers
+
+      let current_session = Cookies.get('current_session')
+
+      let payload = {"current_session": current_session }
+
+      HTTP_game.post(`/session_checkers`, payload)
+        .then(response => {
+          this.queensOnField = []
+          this.checkers = response.data
+        })
     },
     
     getCellID() {
@@ -266,20 +284,121 @@ export default {
       }
       return "gray-cell"
     },
+
     getCheckerClick() {
-      alert(event.currentTarget.id)
-      //Если состояние не хода, то вызываем пакет ручек, связанных с началом ходов игроков
+
+      let id = event.currentTarget.id
+
+      let check_id = this.queensOnField.find(o => o == id)
+      let isQueen = false
+      
+      if (id == check_id) {
+        isQueen = true
+      }
+
+      const horiz = Math.floor((64 - id) / 8) + 1;
+      const vertic = 8 - ((64 - id) % 8);
+
+      alert(event.currentTarget.id + " " + horiz + " " + vertic)
+
+      let current_session = Cookies.get('current_session')
+
+      //Если состояние не хода, то вызываем ручку, предоставляющую пользователю список ходов
+      if (this.turn_status == 0) {
+        let payload = { 
+          "current_session": current_session, 
+          "color": this.color, 
+          "horiz": horiz, 
+          "vertic": vertic, 
+          "isQueen": isQueen }
+
+        //Запрашиваем множество ходов у сервера
+        HTTP_game.post(`/${this.gameType}_available_moves`, payload)
+          .then(response => {
+            this.cellsToGo = response.data
+            if (this.cellsToGo.length != 0) {
+              this.turn_status = 1
+              this.clickedHoriz = horiz
+              this.clickedVertic = vertic
+            }
+          })
+
+        return
+      }
 
       //Если состояние хода, то вызываем пакет ручек, связанных с началом ходов игроков
+      if (turn_status == 1) {
+        let payload = { 
+          "current_session": current_session, 
+          "color": this.color, 
+          "horiz": this.clickedHoriz, 
+          "vertic": this.clickedVertic, 
+          "new_horiz": horiz, 
+          "new_vertic": vertic, 
+          "isQueen": isQueen }
+
+        //Делаем ход, сохраняем координаты последнего места хода
+        HTTP_game.post(`/${this.gameType}_move`, payload)
+          .then(response => {
+            this.cellsToGo = response.data
+            if (this.cellsToGo.length != 0) {
+              this.updateField()
+              this.afterMove(horiz, vertic)
+            }
+          })
+          .catch(error => {
+            this.cellsToGo = []
+            turn_status = 0
+          })
+
+        return
+      }
+    },
+
+    afterMove(horiz, vertic) {
+      //Требуется залить ячейки
+
+      let current_session = Cookies.get('current_session')
+
+      //Если состояние не хода, то вызываем ручку, предоставляющую пользователю список ходов
+      let payload = { 
+        "current_session": current_session, 
+        "color": this.color, 
+        "horiz": horiz, 
+        "vertic": vertic }
+
+      //Запрашиваем множество ходов у сервера
+      HTTP_game.post(`/${this.gameType}_after_move`, payload)
+        .then(response => {
+          this.cellsToGo = response.data
+          if (this.cellsToGo.length != 0) {
+            this.turn_status = 1
+            this.clickedHoriz = horiz
+            this.clickedVertic = vertic
+          }
+          else {
+            this.turnStatus = 0
+            this.clickedHoriz = -1
+            this.clickedVertic = -1
+          }
+        })
+        .catch(error => {
+          this.cellsToGo = []
+          this.turnStatus = 0
+        })
     },
 
     getHighlightColor(id) {
       const horiz = Math.floor((64 - id) / 8) + 1;
       const vertic = 8 - ((64 - id) % 8);
-      if (id == 34 || id == 43 || id == 36) {
-        return "highlighted-field"
+      
+      for (let index = 0; index < this.cellsToGo.length; index++) {
+        if (horiz == this.cellsToGo[index].horiz) {
+          if (vertic == this.cellsToGo[index].vertic) {
+            return "highlighted-field"
+          }
+        }
       }
-
 
       return "not-highlighted-field"
     },
@@ -297,6 +416,7 @@ export default {
         if (horiz == this.checkers.white[index].horiz) {
           if (vertic == this.checkers.white[index].vertic) {
             if (this.checkers.white[index].isQueen == true) {
+              this.queensOnField.push(id)
               return "queen-white-piece"
             }
             return "white-piece"
@@ -308,6 +428,7 @@ export default {
         if (horiz == this.checkers.black[index].horiz) {
           if (vertic == this.checkers.black[index].vertic) {
             if (this.checkers.black.isQueen == true) {
+              this.queensOnField.push(id)
               return "queen-black-piece"
             }
             return "black-piece"
@@ -345,29 +466,27 @@ export default {
     this.updateField()
     this.getGameInfo()
   },
-  mounted: function () {
+  mounted () {
     this.fieldTimer = setInterval(() => {
-      this.updateField()
-    }, 1500)
+      if (this.fieldTimer%2 != 1)
+        this.updateField()
+    }, 1000)
   },
   beforeDestroy() {
     clearInterval(this.fieldTimer)
   },
-  watch: {
-    //Обратный отсчёт
-    timerCount: {
-      handler(value) {
-        if (value > 0) {
-          setTimeout(() => {
-            this.timerCount--;
-          }, 1000);
-        }
-      },
-      immediate: true
-    }
+watch: {
+  timerCount: {
+    handler(value) {
+      if (value > 0) {
+        setTimeout(() => {
+        }, 1000);
+      }
+    },
+    immediate: true // This ensures the watcher is triggered upon creation
   }
 }
-
+}
 </script>
 
 <style lang="scss" scoped>

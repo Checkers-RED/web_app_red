@@ -108,6 +108,20 @@ export default defineComponent({
     createTournament() {
       this.$router.push('/createtournament');
     },
+    checkIfInRankedMatch() {      
+      let current_session = Cookies.get('current_session')
+
+      let payload = {"current_session": current_session }
+
+      HTTP.post(`/IsInMatch`, payload)
+        .then(response => {
+          this.inRankedQueue = response.status
+
+        })
+    }
+  },
+  mounted() {
+    this.checkIfInRankedMatch()
   }
 });
 </script>
