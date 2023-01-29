@@ -1,6 +1,6 @@
 <template>
   <h1>Ваш ход</h1>
-  <div class="full-desk">
+  <div class="full-desk" :class="isWhite()">
     <div class="letters" style="transform: rotate(180deg)">
       <p v-for="Cell in horizCellsNames.slice().reverse()">{{ Cell }}</p>
     </div>
@@ -49,161 +49,6 @@ export default {
       //Множество шашек
       checkers: 
       {
-          "white":
-          [
-              {
-                  "horiz": 1,
-                  "vertic": 1,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },
-              {
-                  "horiz": 1,
-                  "vertic": 3,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 1,
-                  "vertic": 5,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 1,
-                  "vertic": 7,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 2,
-                  "vertic": 2,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 2,
-                  "vertic": 4,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 2,
-                  "vertic": 6,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 2,
-                  "vertic": 8,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 3,
-                  "vertic": 1,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 3,
-                  "vertic": 3,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 3,
-                  "vertic": 5,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 3,
-                  "vertic": 7,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              }
-          ],
-
-          "black":
-          [
-              {
-                  "horiz": 6,
-                  "vertic": 2,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },
-              {
-                  "horiz": 6,
-                  "vertic": 4,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 6,
-                  "vertic": 6,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 6,
-                  "vertic": 8,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 7,
-                  "vertic": 1,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 7,
-                  "vertic": 3,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 7,
-                  "vertic": 5,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 7,
-                  "vertic": 7,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 8,
-                  "vertic": 2,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 8,
-                  "vertic": 4,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 8,
-                  "vertic": 6,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              },        {
-                  "horiz": 8,
-                  "vertic": 8,
-                  "isQueen": false,
-                  "canBeat": false,
-                  "isBeaten": false
-              }
-          ]
       },
 
       //Идентификатор клетки
@@ -215,9 +60,6 @@ export default {
 
       //Идентификатор шашки
       lastCheckerID: 0,
-      
-      //Таймер по умолчанию и обратный отсчёт
-      defaultTimer: 60,
 
       //Таймер для фоновых событий
       fieldTimer: null,
@@ -251,6 +93,33 @@ export default {
     }
   },
   methods: {
+
+    getGameInfo() {
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
+      
+      HTTP.post(`/GetGameInfo`, payload)
+        .then(response => {
+          if (response.data.rules_id == 1)
+            this.gameType = "ru"
+          if (response.data.rules_id == 2)
+            this.gameType = "en"
+          if (response.data.rules_id == 3)
+            this.gameType = "tu"
+          
+          
+        HTTP.post(`/UserScore`, payload)
+          .then(response_second => {
+            if (response.data.nick != response_second.data.white_nick) {
+              this.color = "black"
+            }
+          })
+      })
+      .catch(error => {
+        this.gameType = "ru"
+      })
+    },
+
     updateField() {
       //Обновление всего поля
 
@@ -258,36 +127,38 @@ export default {
 
       let payload = {"current_session": current_session }
 
-      HTTP_game.post(`/session_checkers`, payload)
+      HTTP.post(`/SessionCheckers`, payload)
         .then(response => {
           this.queensOnField = []
           this.checkers = response.data
+          console.log(JSON.stringify(this.checkers))
+          console.log(JSON.stringify(response.data))
+          console.log(JSON.stringify(response.data.white))
+          console.log(JSON.stringify(response.data.black))
         })
     },
-    
-    getCellID() {
-      this.lastCellID += 1;
-      return this.lastCellID;
-    },
-    getCellColor() {
-      this.CellColor = !this.CellColor
 
-      if (this.numOfCellInRow == this.horizCells.length) {
-        this.numOfCellInRow = 0
-        this.CellColor = !this.CellColor
-      }
-      
-      this.numOfCellInRow += 1
+    //Обработчик начала хода, если ход оппонента
+    turn_begin() {
 
-      if (this.CellColor){ 
-        return "white-cell"
+      if (this.activeColor != this.color) {
+
+        let current_session = Cookies.get('current_session')
+
+        let payload = {"current_session": current_session }
+
+        HTTP.post(`/${this.gameType}_turn_begin`, payload)
+          .then(response => {
+
+          })
       }
-      return "gray-cell"
     },
 
     getCheckerClick() {
 
       let id = event.currentTarget.id
+
+      id = parseInt(id.split('-')[1])
 
       let check_id = this.queensOnField.find(o => o == id)
       let isQueen = false
@@ -296,10 +167,8 @@ export default {
         isQueen = true
       }
 
-      const horiz = Math.floor((64 - id) / 8) + 1;
-      const vertic = 8 - ((64 - id) % 8);
-
-      alert(event.currentTarget.id + " " + horiz + " " + vertic)
+      const horiz = 8 - ((64 - id) % 8);
+      const vertic = Math.floor((64 - id) / 8) + 1;
 
       let current_session = Cookies.get('current_session')
 
@@ -353,6 +222,34 @@ export default {
 
         return
       }
+
+
+      //Если состояние хода после ударного хода, то не удаляем последнее поле хода
+      if (turn_status == 2) {
+        let payload = { 
+          "current_session": current_session, 
+          "color": this.color, 
+          "horiz": this.clickedHoriz, 
+          "vertic": this.clickedVertic, 
+          "new_horiz": horiz, 
+          "new_vertic": vertic, 
+          "isQueen": isQueen }
+
+        //Делаем ход, сохраняем координаты последнего места хода
+        HTTP_game.post(`/${this.gameType}_move`, payload)
+          .then(response => {
+            this.cellsToGo = response.data
+            if (this.cellsToGo.length != 0) {
+              this.updateField()
+              this.afterMove(horiz, vertic)
+            }
+          })
+          .catch(error => {
+            
+          })
+
+        return
+      }
     },
 
     afterMove(horiz, vertic) {
@@ -372,7 +269,7 @@ export default {
         .then(response => {
           this.cellsToGo = response.data
           if (this.cellsToGo.length != 0) {
-            this.turn_status = 1
+            this.turn_status = 2
             this.clickedHoriz = horiz
             this.clickedVertic = vertic
           }
@@ -383,9 +280,28 @@ export default {
           }
         })
         .catch(error => {
-          this.cellsToGo = []
-          this.turnStatus = 0
+          
         })
+    },
+
+    getCellID() {
+      this.lastCellID += 1;
+      return this.lastCellID;
+    },
+    getCellColor() {
+      this.CellColor = !this.CellColor
+
+      if (this.numOfCellInRow == this.horizCells.length) {
+        this.numOfCellInRow = 0
+        this.CellColor = !this.CellColor
+      }
+      
+      this.numOfCellInRow += 1
+
+      if (this.CellColor){ 
+        return "white-cell"
+      }
+      return "gray-cell"
     },
 
     getHighlightColor(id) {
@@ -409,56 +325,45 @@ export default {
     },
     getCheckerClass(id) {
 
-      const horiz = Math.floor((64 - id) / 8) + 1;
-      const vertic = 8 - ((64 - id) % 8);
-    
-      for (let index = 0; index < this.checkers.white.length; index++) {
-        if (horiz == this.checkers.white[index].horiz) {
-          if (vertic == this.checkers.white[index].vertic) {
-            if (this.checkers.white[index].isQueen == true) {
-              this.queensOnField.push(id)
-              return "queen-white-piece"
+      const horiz = 8 - ((64 - id) % 8);
+      const vertic = Math.floor((64 - id) / 8) + 1;
+
+      try {
+        for (let index = 0; index < this.checkers.length; index++) {
+          if (horiz == this.checkers[index].horiz) {
+            if (vertic == this.checkers[index].vertic) {
+
+              if (this.checkers[index].color == "white") {
+                if (this.checkers[index].isQueen == true) {
+                  this.queensOnField.push(id)
+                  return "queen-white-piece"
+                }
+                return "white-piece"
+              }
+
+              if (this.checkers[index].color == "black") {
+                if (this.checkers[index].isQueen == true) {
+                  this.queensOnField.push(id)
+                  return "queen-black-piece"
+                }
+                return "black-piece"
+              }
+              
             }
-            return "white-piece"
+
           }
         }
+
+        return "null-piece"
+
+      } catch(error) {
+        return "null-piece"
       }
 
-      for (let index = 0; index < this.checkers.black.length; index++) {
-        if (horiz == this.checkers.black[index].horiz) {
-          if (vertic == this.checkers.black[index].vertic) {
-            if (this.checkers.black.isQueen == true) {
-              this.queensOnField.push(id)
-              return "queen-black-piece"
-            }
-            return "black-piece"
-          }
-        }
-      }
-
-      return "null-piece"
     },
-
-    getGameInfo() {
-      let current_session = Cookies.get('current_session')
-      let payload = {"current_session": current_session}
-      
-      HTTP.post(`/GetGameInfo`, payload)
-        .then(response => {
-          if(response.data.rules_id == 1)
-            this.gameType = "ru"
-          if (response.data.rules_id == 2)
-            this.gameType = "en"
-          if (response.data.rules_id == 3)
-            this.gameType = "tu"
-          this.defaultTimer = response.data.move_time
-          this.timerCount = this.defaultTimer
-      })
-      .catch(error => {
-        this.gameType = "ru"
-        this.defaultTimer = 60,
-        this.timerCount = 60
-      })
+    isWhite() {
+      if (this.color != "white")
+        return "desk-rotate"
     }
 
   },
@@ -468,22 +373,15 @@ export default {
   },
   mounted () {
     this.fieldTimer = setInterval(() => {
-      if (this.fieldTimer%2 != 1)
         this.updateField()
-    }, 1000)
+    }, 5000)
   },
   beforeDestroy() {
     clearInterval(this.fieldTimer)
   },
 watch: {
-  timerCount: {
-    handler(value) {
-      if (value > 0) {
-        setTimeout(() => {
-        }, 1000);
-      }
-    },
-    immediate: true // This ensures the watcher is triggered upon creation
+  activeColor() {
+    this.turn_begin()
   }
 }
 }
@@ -533,6 +431,9 @@ watch: {
     flex-direction: row;
     width: 100%;
     height: fit-content;
+  }
+  .desk-rotate {
+    transform: rotate(180deg)
   }
 
 

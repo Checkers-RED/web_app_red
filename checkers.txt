@@ -1,0 +1,169 @@
+
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
+      if (current_session) {
+        HTTP.post(`/OpponentInfo`, payload)
+          .then(response => {
+            this.nickname = response.data.nick
+            this.score = response.data.score
+            this.photo = response.data.photo
+          })
+
+checkers: 
+      {
+          "white":
+          [
+              {
+                  "horiz": 1,
+                  "vertic": 1,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },
+              {
+                  "horiz": 1,
+                  "vertic": 3,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 1,
+                  "vertic": 5,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 1,
+                  "vertic": 7,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 2,
+                  "vertic": 2,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 2,
+                  "vertic": 4,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 2,
+                  "vertic": 6,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 2,
+                  "vertic": 8,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 3,
+                  "vertic": 1,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 3,
+                  "vertic": 3,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 3,
+                  "vertic": 5,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 3,
+                  "vertic": 7,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              }
+          ],
+
+          "black":
+          [
+              {
+                  "horiz": 6,
+                  "vertic": 2,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },
+              {
+                  "horiz": 6,
+                  "vertic": 4,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 6,
+                  "vertic": 6,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 6,
+                  "vertic": 8,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 7,
+                  "vertic": 1,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 7,
+                  "vertic": 3,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 7,
+                  "vertic": 5,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 7,
+                  "vertic": 7,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 8,
+                  "vertic": 2,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 8,
+                  "vertic": 4,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 8,
+                  "vertic": 6,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              },        {
+                  "horiz": 8,
+                  "vertic": 8,
+                  "isQueen": false,
+                  "canBeat": false,
+                  "isBeaten": false
+              }
+          ]
+      },

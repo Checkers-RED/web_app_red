@@ -16,7 +16,7 @@ import Cookies from "js-cookie"
 import {HTTP} from '@/assets/http-common.js'
 
 import Move from '@/components/Move.vue'
-import Desk from '@/components/Desk.vue';
+import Desk from '@/components/Desk.vue'
 
 
 export default {
@@ -37,7 +37,7 @@ export default {
       HTTP.post(`/IsInMatch`, payload)
         .then(response => {
           if (response.data.status == false) {
-            //this.$router.push('/')
+            this.$router.push('/')
           }
       })
     }

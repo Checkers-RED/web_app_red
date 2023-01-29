@@ -34,13 +34,31 @@ export default {
   },
   data () {
     return {
+      //Таймер по умолчанию и обратный отсчёт
+      defaultTimer: 60,
+      
       timerCount: 60,
       fieldTimer: null,
       timer: null,
-      moves: []
+      moves: [],
+      
     }
   },
   methods: {
+    getGameInfo() {
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
+      
+      HTTP.post(`/GetGameInfo`, payload)
+        .then(response => {
+          this.defaultTimer = response.data.move_time
+          this.timerCount = this.defaultTimer
+      })
+      .catch(error => {
+        this.defaultTimer = 60,
+        this.timerCount = 60
+      })
+    },
     GetMoves() {
       let current_session = Cookies.get('current_session')
       let payload = {"current_session": current_session}

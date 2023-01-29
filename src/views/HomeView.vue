@@ -38,12 +38,22 @@ export default {
       HTTP.post(`/IsInMatch`, payload)
         .then(response => {
           if (response.data.status == true) {
-            //this.$router.push('/play')
+            this.$router.push('/play')
           }
       })
+    },
+    checkIsLoggedIn() {
+      let current_session = Cookies.get('current_session')
+      
+      if (current_session === undefined)
+        this.$router.push('/login')
+        
+      if (current_session == "")
+        this.$router.push('/login')
     }
   },
   mounted: function () {
+    this.checkIsLoggedIn()
     this.timer = setInterval(() => {
       this.checkIsInMatch()
     }, 5000)
