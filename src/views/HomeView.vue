@@ -52,7 +52,10 @@ export default {
         this.$router.push('/login')
     }
   },
-  mounted: function () {
+  beforeMount() {
+    this.checkIsInMatch()
+  },
+  mounted() {
     this.checkIsLoggedIn()
     this.timer = setInterval(() => {
       this.checkIsInMatch()
