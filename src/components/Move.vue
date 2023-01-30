@@ -1,5 +1,5 @@
 <template>
-  <h1>Совершённые ходы</h1>
+  <h1>Оставшееся время: {{ timerCount }}</h1>
   <div class="move">
     <ul id="list">
       <li v-for="move in moves" :key="move">
@@ -34,14 +34,31 @@ export default {
   },
   data () {
     return {
+      //Таймер по умолчанию и обратный отсчёт
+      defaultTimer: 60,
+      
+      timerCount: 60,
+      fieldTimer: null,
       timer: null,
-      moves: [
-        {note: 'A2-G4 B6-A5'},
-        {note: 'B2-A3 '}
-      ]
+      moves: [],
+      
     }
   },
   methods: {
+    getGameInfo() {
+      let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
+      
+      HTTP.post(`/GetGameInfo`, payload)
+        .then(response => {
+          this.defaultTimer = response.data.move_time
+          this.timerCount = this.defaultTimer
+      })
+      .catch(error => {
+        this.defaultTimer = 60,
+        this.timerCount = 60
+      })
+    },
     GetMoves() {
       let current_session = Cookies.get('current_session')
       let payload = {"current_session": current_session}
@@ -51,9 +68,20 @@ export default {
         .then(response => {
           this.moves = response.data
       })
+    },
+    reduceTimer() {
+      if (this.timerCount > 0)
+        this.timerCount -= 1
     }
   },
-  mounted: function () {
+  beforeMount() {
+    this.GetMoves()
+  },
+  mounted() {
+    this.fieldTimer = setInterval(() => {
+      this.reduceTimer()
+    }, 1000)
+
     this.timer = setInterval(() => {
       this.GetMoves()
     }, 5000)

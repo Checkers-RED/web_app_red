@@ -340,6 +340,7 @@
     border-radius: 50%;
     border: 1px solid #E0E0E0;
     margin-right: 12px;
+    overflow: hidden;
   }  
   .btn-group {
     margin-left: auto;

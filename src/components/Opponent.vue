@@ -36,17 +36,48 @@ export default {
             this.score = response.data.score
             this.photo = response.data.photo
           })
-      }
+          /*.catch(error => {
+            this.$router.push('/login');
+          })*/
+        
+      } /*else {
+        this.$router.push('/login');
+      }*/
     }
   },
  beforeMount(){
     this.UserData()
- }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 1000px) {
+  .nickname {
+    width: 44%;  
+  }
+  .scores {
+    width: 40%;
+    border-radius: 0px;
+  }
+  p {
+  font-size: 18px;
+  }
+}
+@media screen and (min-width: 1000px) {
+  .nickname {
+    width: 35%;  
+  }
+  .scores {
+    width: 35%;
+  border-radius: 0px 22.5px 22.5px 0px;
+  }
+  p {
+  font-size: 20px;
+  }
+}
 .profile {  
+  width: 100%;
   margin-right: auto;
   display: flex;
   align-items: center;
@@ -58,13 +89,10 @@ export default {
 }
 .nickname {
   height: 45px;
-  width: 135px;
   background-color: #e6e6e6;  
 }
 .scores {
   height: 45px;
-  width: 180px;
-  border-radius: 0px 22.5px 22.5px 0px;
   background-color: #e6e6e6;
 }
 .profile div {
@@ -78,7 +106,6 @@ p {
   text-align: center;
   vertical-align: middle;
   font-weight: 400;
-  font-size: 20px;
   line-height: 24px;
 }
 </style>
