@@ -57,7 +57,7 @@ export default {
     width: 44%;  
   }
   .scores {
-    width: 40%;
+    width: 43%;
     border-radius: 0px;
   }
   p {
@@ -70,7 +70,7 @@ export default {
   }
   .scores {
     width: 35%;
-  border-radius: 0px 22.5px 22.5px 0px;
+    border-radius: 0px 22.5px 22.5px 0px;
   }
   p {
   font-size: 20px;
@@ -97,7 +97,7 @@ export default {
 }
 .profile div {
   padding-top: 10px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #FF8181;
 }
 .profile div:not(:last-child) {
   border-right: none;

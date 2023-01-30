@@ -55,6 +55,7 @@ export default {
 </script>
 
 <style lang="scss">
+@media screen and (min-width: 1000px) {
   .row {    
     display: flex;    
   }
@@ -65,4 +66,21 @@ export default {
   .col-2 {      
     flex: 50%;
   }
+}
+@media screen and (max-width: 1000px) {
+  .row {
+    display: flex;
+    flex-direction: column;
+  }
+  .col-1 {
+    flex: 100%;
+    margin-right: 0%;
+    order: 2;
+  }
+  .col-2 {
+    flex: 100%;
+    margin-left: 0%;
+    order: 1;
+  }
+}
 </style>

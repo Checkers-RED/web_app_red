@@ -384,6 +384,106 @@ watch: {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 1000px) {
+  .number {
+    font-size: 18px;
+    height: 200%;
+  }
+  .letters {
+    font-size: 18px;
+    width: 95%;
+  }
+  .full-desk {
+    width: 100%;
+    height: 100%;
+    max-width: 380px;
+    max-height: 380px;
+  }
+  .inner-desk {
+    width: 100%;
+  }
+  .table-wrapper {
+    width: 340px;
+    height: 340px;
+  }
+  .not-highlighted-field {
+    width: 42.5px;
+    height: 42.5px;
+  }
+  .highlighted-field {
+    width: 42.5px;
+    height: 42.5px;
+  }
+  .null-piece {
+    width: 42.5px;
+    height: 42.5px;
+  }
+  .white-piece {
+    width: 35px;
+    height: 35px;
+  }
+  .black-piece {
+    width: 35px;
+    height: 35px;
+  }
+  .queen-white-piece {
+    width: 35px;
+    height: 35px;
+  }
+  .queen-black-piece {
+    width: 35px;
+    height: 35px;
+  }
+}
+@media screen and (min-width: 1000px) {
+  .number {
+    font-size: 20px;
+    height: 109%;
+  }
+  .letters {
+    font-size: 20px;
+    width: 100%;
+  }
+  .full-desk {
+    width: 700px;
+    height: 700px;
+  }
+  .inner-desk {
+    width: 100%;
+  }
+  .table-wrapper {
+    width: 640px;
+    height: 640px;
+  }
+  .not-highlighted-field {
+    width: 79.75px;
+    height: 79.75px;
+  }
+  .highlighted-field {
+    width: 79.75px;
+    height: 79.75px;
+  }
+  .null-piece {
+    width: 79.75px;
+    height: 79.75px;
+  }
+  .white-piece {
+    width: 60px;
+    height: 60px;
+  }
+  .black-piece {
+    width: 60px;
+    height: 60px;
+  }
+  .queen-white-piece {
+    width: 60px;
+    height: 60px;
+  }
+  .queen-black-piece {
+    width: 60px;
+    height: 60px;
+  }
+}
   p {
     margin-bottom: 0;
   }
@@ -392,25 +492,19 @@ watch: {
     position: relative;
     justify-content: space-evenly;
     flex-direction: column;
-    height: 109%;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
   }
   .letters {
     display: flex;
     position: relative;
     justify-content: space-evenly;
-    width: 100%;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
   }
 
 
   .full-desk {
-    width: 700px;
-    height: 700px;
     background-color: #fff;
     border: 1px solid #000000;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
@@ -425,7 +519,6 @@ watch: {
     justify-content:space-evenly;
     align-items: center;
     flex-direction: row;
-    width: 100%;
     height: fit-content;
   }
   .desk-rotate {
@@ -436,8 +529,6 @@ watch: {
   .table-wrapper {
     flex-shrink: 0;
     position: relative;
-    width: 640px;
-    height: 640px;
     overflow-y: hidden;
     overflow-x: hidden;
     border: 1px solid #BEBEBE;
@@ -465,8 +556,6 @@ watch: {
   }
 
   .not-highlighted-field {
-    width: 79.75px;
-    height: 79.75px;
     text-align: center;
     vertical-align: middle;
     overflow-x: hidden;
@@ -474,8 +563,6 @@ watch: {
   }
 
   .highlighted-field {
-    width: 79.75px;
-    height: 79.75px;
     background-color: #FEF499;
     border: 3px solid #33CC88;
     border-radius: 3px;
@@ -487,16 +574,12 @@ watch: {
 
 
   .null-piece {
-    width: 79.75px;
-    height: 79.75px;
     text-align: center;
     vertical-align: middle;
     overflow-x: hidden;
     overflow-y: hidden;
   }
   .white-piece {
-    width: 60px;
-    height: 60px;
     background-color: #fff;
     border: 2px solid #777;
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 1);
@@ -505,8 +588,6 @@ watch: {
     cursor: pointer;
   }
   .black-piece {
-    width: 60px;
-    height: 60px;
     background-color: #000000;
     border: 1px solid #000000;
     border-radius: 50%;
@@ -514,8 +595,6 @@ watch: {
     cursor: pointer;
   }
   .queen-white-piece {
-  width: 60px;
-  height: 60px;
   background-color: red;
   border: 1px solid #000000;
   border-radius: 50%;
@@ -523,8 +602,6 @@ watch: {
   cursor: pointer;
   }
   .queen-black-piece {
-  width: 60px;
-  height: 60px;
   background-color: purple;
   border: 1px solid #000000;
   border-radius: 50%;
