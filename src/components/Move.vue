@@ -94,9 +94,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 1000px) {
+  .move {
+    width: 100%;
+    min-width: 380px;
+    height: 300px;
+  }
+  .move li {
+    font-size: 18px;
+  }
+  .opponent {
+    width: 100%;
+    font-size: 18px;
+  }
+  .nickname {
+    width: 100%; 
+    font-size: 18px;
+  }
+}
+@media screen and (min-width: 1000px) {
   .move {
     width: 500px;
     height: 700px;
+  }
+  .move li {
+    font-size: 20px;
+  }
+  .opponent {
+    width: 500px;
+    font-size: 20px;
+  }
+  .nickname {
+    width: 500px; 
+    font-size: 20px;
+  }
+}
+  .move {
     position: relative;
     display: flex;
     margin-top: 0;
@@ -107,6 +140,8 @@ export default {
     border-radius: 11px;
   }
   .move ul {
+    padding: 0;
+    margin: 0;
     overflow-y: auto;
 
   }
@@ -122,38 +157,32 @@ export default {
   }
   .move li {
     height: 75px;
-    width: 494px;
-    margin-left: -40px;
+    width: 100%;
     padding: 15px;
     list-style: circle;
     display: flex;
     align-items: center;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
     border-bottom: 1px solid #E0E0E0;
   }
   .opponent {
-    width: 500px; 
     height: 75px;   
     position: absolute;
     bottom: 75px;       
     border-top: 1px solid #E0E0E0;
     padding: 15px;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
     display: flex;
   }
   .nickname {
-    width: 500px; 
     height: 75px;   
     position: absolute;
     bottom: 0;       
     border-top: 1px solid #E0E0E0;
     padding: 15px;
     font-weight: 400;
-    font-size: 20px;
     line-height: 24px;
     display: flex;
   }

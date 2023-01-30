@@ -129,7 +129,7 @@ export default {
 @media screen and (max-width: 1000px) {
   .notify {
     width: 100%;
-    height: 280px;
+    height: 305px;
     border-radius: 0 0 11px 11px;
     border-top: 1px solid #E0E0E0;
   }
@@ -171,6 +171,7 @@ export default {
   }
   ul {
     padding: 0px;
+    margin: 0;
   }
   li {
     height: 75px;

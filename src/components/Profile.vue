@@ -57,7 +57,7 @@ export default {
     width: 44%;  
   }
   .scores {
-    width: 40%;
+    width: 43%;
     border-radius: 0px;
   }
   p {

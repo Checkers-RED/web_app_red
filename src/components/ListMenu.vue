@@ -7,40 +7,42 @@
       <button class="btnNotifs" @click="openNotifs=!openNotifs"></button>
       <SettingsButton />
     </div>
-    <button class="menu-item" @click="changeVisibility(0)">
-      <div class="match"></div>
-      Рейтинговый матч
-    </button>
-    <div class="panel" v-show="isVisible[0]">
-      <SelectVariant ref="rankedGameVariant" />
-      <button @click="enterTheQueue();">
-          <span v-show="!inRankedQueue">Начать поиск</span>
-          <span v-show="inRankedQueue">Остановить поиск </span>
-      </button> 
-      <span v-show="inRankedQueue"><sync-outlined spin/></span>
-    </div>
-    <!--<button class="menu-item" @click="joinTournament">
-      <div class="tournament"></div>
-      Присоединиться к турниру
-    </button>
-    
-    <button class="menu-item" @click="createTournament">
-      <div class="create"></div>
-      Создать пользовательский турнир
-    </button> -->
-    
-    <button class="menu-item" @click="changeVisibility(1)">
-      <div class="bot"></div>
-      Игра с ботом
-    </button>
-    <div class="panel" v-show="isVisible[1]">
-      <SelectVariant ref="botGameVariant" />
-      <p>Время на ход (секунды)</p>
-      <div class="time">
-        <input type="number" name="time" min="10" max="60" step="5" value="60">      
-        <button>Начать игру</button>
-      </div> 
-    </div>    
+    <div class="main">
+      <button class="menu-item" @click="changeVisibility(0)">
+        <div class="match"></div>
+        Рейтинговый матч
+      </button>
+      <div class="panel" v-show="isVisible[0]">
+        <SelectVariant ref="rankedGameVariant" />
+        <button @click="enterTheQueue();">
+            <span v-show="!inRankedQueue">Начать поиск</span>
+            <span v-show="inRankedQueue">Остановить поиск </span>
+        </button> 
+        <span v-show="inRankedQueue"><sync-outlined spin/></span>
+      </div>
+      <!--<button class="menu-item" @click="joinTournament">
+        <div class="tournament"></div>
+        Присоединиться к турниру
+      </button>
+      
+      <button class="menu-item" @click="createTournament">
+        <div class="create"></div>
+        Создать пользовательский турнир
+      </button> -->
+      
+      <button class="menu-item" @click="changeVisibility(1)">
+        <div class="bot"></div>
+        Игра с ботом
+      </button>
+      <div class="panel" v-show="isVisible[1]">
+        <SelectVariant ref="botGameVariant" />
+        <p>Время на ход (секунды)</p>
+        <div class="time">
+          <input type="number" name="time" min="10" max="60" step="5" value="60">      
+          <button>Начать игру</button>
+        </div> 
+      </div>  
+    </div>  
     <div class="nickname">
       <Profile />
       <SettingsButton />
@@ -140,16 +142,16 @@ export default defineComponent({
     width: 100%;
     min-width: 380px;
     height: 380px;
-    overflow: auto;
     margin-bottom: 25px;
+  }
+  .main {
+    overflow: auto;
+    border-top: 1px solid #E0E0E0;
   }
   .menu-item {
     min-height: 75px;
     font-size: 18px;   
     border: none; 
-    border-top: 1px solid #E0E0E0;
-  }  
-  .menu-item:last-of-type {
     border-bottom: 1px solid #E0E0E0;
   }
   .panel button {
@@ -177,7 +179,7 @@ export default defineComponent({
   }
   .notifs {
     width: 100%;
-    min-width: 380px;
+    max-width: 380px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
     border: 1px solid #E0E0E0;
     border-radius: 11px;
@@ -233,6 +235,9 @@ export default defineComponent({
     display: flex;
   }
   .mobile {
+    display: none;
+  }
+  .notifs {
     display: none;
   }
 }
