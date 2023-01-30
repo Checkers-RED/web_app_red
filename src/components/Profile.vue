@@ -7,7 +7,7 @@
       <p>{{ nickname }}</p>
     </div>
     <div class="scores">
-      <p>{{ score }}</p>
+      <p>{{ score }} очков</p>
     </div>
   </div>
 </template>
@@ -36,13 +36,13 @@ export default {
             this.score = response.data.score
             this.photo = response.data.photo
           })
-          /*.catch(error => {
+          .catch(error => {
             this.$router.push('/login');
-          })*/
+          })
         
-      } /*else {
+      } else {
         this.$router.push('/login');
-      }*/
+      }
     }
   },
  beforeMount(){

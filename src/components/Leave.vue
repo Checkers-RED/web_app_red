@@ -8,7 +8,7 @@
       </li>
       <li>
         <span class="confirm"></span>
-        <button>Да, я желаю покинуть турнир</button>
+        <button @click="leave">Да, я желаю покинуть турнир</button>
       </li>
     </ul>
   </div>
@@ -25,7 +25,9 @@ export default {
     }
   },
   methods: {
-
+    leave() {
+      this.$router.push('/');
+    }
   }
 }
 </script>
