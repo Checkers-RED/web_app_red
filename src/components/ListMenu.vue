@@ -7,11 +7,11 @@
       <button class="btnNotifs" @click="openNotifs=!openNotifs"></button>
       <SettingsButton />
     </div>
-    <button class="menu-item" @click="isVisible=!isVisible; isVisible2=false">
+    <button class="menu-item" @click="changeVisibility(0)">
       <div class="match"></div>
       Рейтинговый матч
     </button>
-    <div class="panel" v-show="isVisible">
+    <div class="panel" v-show="isVisible[0]">
       <SelectVariant ref="rankedGameVariant" />
       <button @click="enterTheQueue();">
           <span v-show="!inRankedQueue">Начать поиск</span>
@@ -19,7 +19,7 @@
       </button> 
       <span v-show="inRankedQueue"><sync-outlined spin/></span>
     </div>
-    <button class="menu-item" @click="joinTournament">
+    <!--<button class="menu-item" @click="joinTournament">
       <div class="tournament"></div>
       Присоединиться к турниру
     </button>
@@ -27,13 +27,13 @@
     <button class="menu-item" @click="createTournament">
       <div class="create"></div>
       Создать пользовательский турнир
-    </button>
+    </button> -->
     
-    <button class="menu-item" @click="isVisible2=!isVisible2; isVisible=false">
+    <button class="menu-item" @click="changeVisibility(1)">
       <div class="bot"></div>
       Игра с ботом
     </button>
-    <div class="panel" v-show="isVisible2">
+    <div class="panel" v-show="isVisible[1]">
       <SelectVariant ref="botGameVariant" />
       <p>Время на ход (секунды)</p>
       <div class="time">
@@ -71,8 +71,7 @@ import Profile from './Profile.vue';
 
 export default defineComponent({
   data: () => ({
-    isVisible: false,
-    isVisible2: false,
+    isVisible: [false, false],
     openNotifs: false,
     inRankedQueue: false,
     chosen_game: "text",
@@ -102,6 +101,15 @@ export default defineComponent({
 
           })
     },
+
+    changeVisibility(id) {
+      for (let index = 0; index < this.isVisible.length; index++) {
+        if (index != id)
+          this.isVisible[index] = false;
+      }
+      this.isVisible[id] = !this.isVisible[id]
+    },
+
     joinTournament() {
       this.$router.push('/tournament');
     },
@@ -116,6 +124,7 @@ export default defineComponent({
 @media screen and (max-width: 1000px) {
   .menu {
     width: 100%;
+    min-width: 380px;
     height: 380px;
     overflow: auto;
     margin-bottom: 25px;
@@ -126,6 +135,9 @@ export default defineComponent({
     border: none; 
     border-top: 1px solid #E0E0E0;
   }  
+  .menu-item:last-of-type {
+    border-bottom: 1px solid #E0E0E0;
+  }
   .panel button {
     font-size: 18px;
   }
@@ -150,7 +162,8 @@ export default defineComponent({
     align-items: center;   
   }
   .notifs {
-    width: 373px;
+    width: 100%;
+    min-width: 380px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
     border: 1px solid #E0E0E0;
     border-radius: 11px;

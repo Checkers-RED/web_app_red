@@ -8,15 +8,18 @@
       <ul>
         <li v-for="participant in participants" :key="participant">
           <div class="participant">
+            <div class="avatar"> <img :src="participant.photo" width="45" height="45"> </div>
             {{ participant }}
           </div>
           <div class="participant">
+            <div class="avatar"> <img :src="participant.photo" width="45" height="45"> </div>
             {{ participant }}
           </div>
         </li>
       </ul>
     </div>
     <div class="start">
+      <div class="attack"></div>
       Начать следующий раунд
     </div>
   </div>
@@ -81,7 +84,8 @@ export default {
   }
 }
   ul {
-    padding: 0px;
+    padding: 0;
+    margin: 0;
   }
   .schedule {
     background: #FFFFFF;
@@ -107,9 +111,20 @@ export default {
     padding: 15px;
     border-bottom: 1px solid #E0E0E0;
   }
+  .attack {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid #E0E0E0;
+    background: url(/public/img/icons/attack.png) no-repeat center/30px;
+    background-color: #e6e6e6;
+    margin-right: 12px;
+  }
+  .table {
+    padding: 0%;
+  }
   li {
     height: 75px;
-    padding: 15px;
     list-style: none;
     display: flex;
     align-items: center;
@@ -118,10 +133,19 @@ export default {
     border-bottom: 1px solid #E0E0E0;
   }
   .participant {
+    display: flex;
+    align-items: center;
+    padding: 15px;
     flex: 50%;
-    border-right: #E0E0E0;
   }
   .participant:first-child {
-    border-right: #E0E0E0;
+    border-right: 1px solid #E0E0E0;
+  }
+  .avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid #E0E0E0;
+    margin-right: 12px;
   }
 </style>
