@@ -11,18 +11,18 @@
       <div class="table-wrapper">
         <table>
           <tr v-for="Cell_v in vertCells">
-            <td v-for="Cell_h in horizCells" :id="`cell-`+((Cell_v - 1) * 8 + Cell_h)" :class="getCellColor()"></td>
+            <td v-for="Cell_h in horizCells" :id="`cell-`+(vertCells.length * horizCells.length - Cell_v * 8 + Cell_h)" :class="cellClasses[vertCells.length * horizCells.length - Cell_v * 8 + Cell_h]"></td>
           </tr>
         </table>
         <table>
           <tr class="tr-dynamic" v-for="Cell_v in vertCells">
-            <div v-for="Cell_h in horizCells" :id="`field-`+((Cell_v - 1) * 8 + Cell_h)" :class="getHighlightColor((Cell_v - 1) * 8 + Cell_h)">
+            <div v-for="Cell_h in horizCells" :id="`field-`+(vertCells.length * horizCells.length - Cell_v * 8 + Cell_h)" :class="cellsToGo[vertCells.length * horizCells.length - Cell_v * 8 + Cell_h]">
             </div>
           </tr>
         </table>
         <table>
           <tr class="tr-dynamic" v-for="Cell_v in vertCells">
-            <div v-for="Cell_h in horizCells" :id="`checker-`+((Cell_v - 1) * 8 + Cell_h)" @click="getCheckerClick" :class="getCheckerClass((Cell_v - 1) * 8 + Cell_h)">
+            <div v-for="Cell_h in horizCells" :id="`checker-`+(vertCells.length * horizCells.length - Cell_v * 8 + Cell_h)" @click="getCheckerClick" :class="checkerClasses[vertCells.length * horizCells.length - Cell_v * 8 + Cell_h]">
             </div>
           </tr>
         </table>
@@ -51,16 +51,6 @@ export default {
       {
       },
 
-      //Идентификатор клетки
-      lastCellID: 0,
-
-      //Номер игровой клетки в строке и переключатель цвета игровой клетки
-      numOfCellInRow: 0,
-      CellColor: false,
-
-      //Идентификатор шашки
-      lastCheckerID: 0,
-
       //Таймер для фоновых событий
       fieldTimer: null,
 
@@ -76,11 +66,20 @@ export default {
       //Текущее состояние хода. 0 = нет выбранного поля, 1 = выбрано поле, 2 = обязательно выбрано поле
       turnStatus: 0,
 
+      //Множество идентификаторов шашек на поле
+      checkerClasses: [],
+
+      //Переключатель цвета игровой клетки
+      cellColor: false,
+      //Множество полей
+      cellClasses: [],
+
       //Множество ходов, которые можно совершить
       cellsToGo: [],
+      highlightClasses: [],
 
       //Все дамки на поле
-      queensOnField: [],
+      queenIDs: [],
 
       //Вертикаль и горизонталь нажатой шашки
       clickedHoriz: -1,
@@ -107,7 +106,6 @@ export default {
           if (response.data.rules_id == 3)
             this.gameType = "tu"
           
-          
         HTTP.post(`/UserScore`, payload)
           .then(response_second => {
             if (response.data.nick != response_second.data.white_nick) {
@@ -129,12 +127,9 @@ export default {
 
       HTTP.post(`/SessionCheckers`, payload)
         .then(response => {
-          this.queensOnField = []
+          this.queenIDs = []
           this.checkers = response.data
-          console.log(JSON.stringify(this.checkers))
-          console.log(JSON.stringify(response.data))
-          console.log(JSON.stringify(response.data.white))
-          console.log(JSON.stringify(response.data.black))
+          this.setCheckerClass()
         })
     },
 
@@ -160,7 +155,7 @@ export default {
 
       id = parseInt(id.split('-')[1])
 
-      let check_id = this.queensOnField.find(o => o == id)
+      let check_id = this.queenIDs.find(o => o == id)
       let isQueen = false
       
       if (id == check_id) {
@@ -284,82 +279,75 @@ export default {
         })
     },
 
-    getCellID() {
-      this.lastCellID += 1;
-      return this.lastCellID;
-    },
-    getCellColor() {
-      this.CellColor = !this.CellColor
+    setCellColor() {
+      for (let index = 0; index <= this.horizCells.length * this.vertCells.length; index++) {
 
-      if (this.numOfCellInRow == this.horizCells.length) {
-        this.numOfCellInRow = 0
-        this.CellColor = !this.CellColor
-      }
-      
-      this.numOfCellInRow += 1
+        if (this.cellColor)
+          this.cellClasses.push("white-cell")
+        else
+          this.cellClasses.push("gray-cell")
 
-      if (this.CellColor){ 
-        return "white-cell"
+        this.cellColor = !this.cellColor
+
+        if (index%this.horizCells.length == 0) {
+          this.cellColor = !this.cellColor
+        }
       }
-      return "gray-cell"
     },
 
-    getHighlightColor(id) {
-      const horiz = Math.floor((64 - id) / 8) + 1;
-      const vertic = 8 - ((64 - id) % 8);
-      
+    initHighlightColor() {
+      for (let index = 0; index <= this.horizCells.length * this.vertCells.length; index++) {
+        this.highlightClasses.push("not-highlighted-field")
+      }
+    },
+    setHighlightColor() {
+      //Очищаем классы
+      for (let index = 0; index <= this.highlightClasses.length; index++) {
+        this.highlightClasses[index] = "not-highlighted-field"
+      }
+
+      //Закрашиваем нужные
+      let highlight_id = 0
+
       for (let index = 0; index < this.cellsToGo.length; index++) {
-        if (horiz == this.cellsToGo[index].horiz) {
-          if (vertic == this.cellsToGo[index].vertic) {
-            return "highlighted-field"
-          }
-        }
-      }
 
-      return "not-highlighted-field"
+        highlight_id = ((this.cellsToGo[index].vertic - 1) * 8 + this.cellsToGo[index].horiz)
+
+        this.highlightClasses[highlight_id] = "highlighted-field"
+      }
     },
 
-    getCheckerID() {
-      this.lastCheckerID += 1;
-      return this.lastCheckerID;
-    },
-    getCheckerClass(id) {
-
-      const horiz = 8 - ((64 - id) % 8);
-      const vertic = Math.floor((64 - id) / 8) + 1;
-
-      try {
-        for (let index = 0; index < this.checkers.length; index++) {
-          if (horiz == this.checkers[index].horiz) {
-            if (vertic == this.checkers[index].vertic) {
-
-              if (this.checkers[index].color == "white") {
-                if (this.checkers[index].isQueen == true) {
-                  this.queensOnField.push(id)
-                  return "queen-white-piece"
-                }
-                return "white-piece"
-              }
-
-              if (this.checkers[index].color == "black") {
-                if (this.checkers[index].isQueen == true) {
-                  this.queensOnField.push(id)
-                  return "queen-black-piece"
-                }
-                return "black-piece"
-              }
-              
-            }
-
-          }
-        }
-
-        return "null-piece"
-
-      } catch(error) {
-        return "null-piece"
+    initCheckerClass() {
+      for (let index = 0; index <= this.horizCells.length * this.vertCells.length; index++) {
+        this.checkerClasses.push("null-piece")
       }
+    },
+    setCheckerClass() {
 
+      //Очищаем классы
+      for (let index = 0; index < this.checkerClasses.length; index++) {
+        this.checkerClasses[index] = "null-piece"
+      }
+      console.log(this.checkers)
+
+      //Изменяем нужные
+      let checker_id = 0
+
+      for (let index = 0; index < this.checkers.length; index++) {
+        checker_id = (this.checkers[index].vertic - 1) * 8 + this.checkers[index].horiz
+
+        try {
+          if (this.checkers[index].isQueen == true) {
+            this.checkerClasses[checker_id] = `queen-${this.checkers[index].color}-piece`
+            continue
+          }
+          //console.log(`${this.checkers[checker_id].color}-piece`)
+
+          this.checkerClasses[checker_id] = `${this.checkers[index].color}-piece`
+            continue
+        } catch(error) { console.log(error) }
+      }
+      console.log(this.checkerClasses)
     },
     isWhite() {
       if (this.color != "white")
@@ -368,8 +356,16 @@ export default {
 
   },
   beforeMount(){
-    this.updateField()
+    //Инициализация доски
+    this.setCellColor()
+    this.initHighlightColor()
+    this.initCheckerClass()
+
+    //Получаем информацию об игровом процессе
     this.getGameInfo()
+
+    //Обновляем шашки на доске
+    this.updateField()
   },
   mounted () {
     this.fieldTimer = setInterval(() => {
