@@ -203,7 +203,7 @@
   beforeMount(){
     this.checkFriends()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.timer)
   }
 }

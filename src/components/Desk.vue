@@ -372,7 +372,7 @@ export default {
         this.updateField()
     }, 5000)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.fieldTimer)
   },
 watch: {

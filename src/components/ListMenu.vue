@@ -130,7 +130,7 @@ export default defineComponent({
         })
     }
   },
-  mounted() {
+  beforeMount() {
     this.checkIfInRankedMatch()
   }
 });

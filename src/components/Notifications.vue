@@ -88,8 +88,6 @@ export default {
   },
   methods: {
     getNotifs() {
-      return
-      
       let current_session = Cookies.get('current_session')
       let payload = {"current_session": current_session}
       
@@ -124,7 +122,7 @@ export default {
   beforeMount(){
     this.getNotifs()
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.timer)
   }
 }

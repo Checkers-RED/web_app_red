@@ -57,7 +57,7 @@ export default defineComponent({
       this.checkFriends()
     }, 5000)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.timer)
   }
 });

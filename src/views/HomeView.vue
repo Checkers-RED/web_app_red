@@ -50,6 +50,11 @@ export default {
         
       if (current_session == "")
         this.$router.push('/login')
+        
+      HTTP.post(`/UserScore`, payload)
+        .catch(error => {
+          this.$router.push('/login');
+        })
     }
   },
   beforeMount() {
@@ -61,7 +66,7 @@ export default {
       this.checkIsInMatch()
     }, 5000)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.timer)
   }
   
