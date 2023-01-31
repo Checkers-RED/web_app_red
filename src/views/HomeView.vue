@@ -44,12 +44,21 @@ export default {
     },
     checkIsLoggedIn() {
       let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
       
       if (current_session === undefined)
         this.$router.push('/login')
         
       if (current_session == "")
         this.$router.push('/login')
+        
+      HTTP.post(`/UserScore`, payload)
+        .then(response => {
+
+        })
+        .catch(error => {
+          this.$router.push('/login');
+        })
     }
   },
   beforeMount() {
@@ -61,7 +70,7 @@ export default {
       this.checkIsInMatch()
     }, 5000)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.timer)
   }
   

@@ -1,6 +1,6 @@
 <template>
   <h1>Ваш ход</h1>
-  <div class="full-desk" :class="isWhite()">
+  <div class="full-desk" :class="`rotate_${color}`">
     <div class="letters" style="transform: rotate(180deg)">
       <p v-for="Cell in horizCellsNames.slice().reverse()">{{ Cell }}</p>
     </div>
@@ -16,8 +16,7 @@
         </table>
         <table>
           <tr class="tr-dynamic" v-for="Cell_v in vertCells">
-            <div v-for="Cell_h in horizCells" :id="`field-`+(vertCells.length * horizCells.length - Cell_v * 8 + Cell_h)" :class="cellsToGo[vertCells.length * horizCells.length - Cell_v * 8 + Cell_h]">
-            </div>
+            <div v-for="Cell_h in horizCells" :id="`field-`+(vertCells.length * horizCells.length - Cell_v * 8 + Cell_h)" :class="highlightClasses[vertCells.length * horizCells.length - Cell_v * 8 + Cell_h]"></div>
           </tr>
         </table>
         <table>
@@ -106,9 +105,11 @@ export default {
           if (response.data.rules_id == 3)
             this.gameType = "tu"
           
-        HTTP.post(`/UserScore`, payload)
+          let white_nick = response.data.white_nick
+
+          HTTP.post(`/UserScore`, payload)
           .then(response_second => {
-            if (response.data.nick != response_second.data.white_nick) {
+            if (white_nick != response_second.data.nick) {
               this.color = "black"
             }
           })
@@ -163,12 +164,15 @@ export default {
       }
 
       const horiz = 8 - ((64 - id) % 8);
-      const vertic = Math.floor((64 - id) / 8) + 1;
+      const vertic = 8 - Math.floor((64 - id) / 8);
+
+      console.log(`${horiz} ${vertic}`)
 
       let current_session = Cookies.get('current_session')
 
       //Если состояние не хода, то вызываем ручку, предоставляющую пользователю список ходов
-      if (this.turn_status == 0) {
+      if (this.turnStatus == 0) {
+        console.log("turn_status 0")
         let payload = { 
           "current_session": current_session, 
           "color": this.color, 
@@ -181,9 +185,10 @@ export default {
           .then(response => {
             this.cellsToGo = response.data
             if (this.cellsToGo.length != 0) {
-              this.turn_status = 1
+              this.turnStatus = 1
               this.clickedHoriz = horiz
               this.clickedVertic = vertic
+              this.setHighlightColor()
             }
           })
 
@@ -191,7 +196,8 @@ export default {
       }
 
       //Если состояние хода, то вызываем пакет ручек, связанных с началом ходов игроков
-      if (turn_status == 1) {
+      if (this.turnStatus == 1) {
+        console.log("turn_status 1")
         let payload = { 
           "current_session": current_session, 
           "color": this.color, 
@@ -212,7 +218,7 @@ export default {
           })
           .catch(error => {
             this.cellsToGo = []
-            turn_status = 0
+            this.turnStatus = 0
           })
 
         return
@@ -220,7 +226,8 @@ export default {
 
 
       //Если состояние хода после ударного хода, то не удаляем последнее поле хода
-      if (turn_status == 2) {
+      if (this.turnStatus == 2) {
+        console.log("turn_status 2")
         let payload = { 
           "current_session": current_session, 
           "color": this.color, 
@@ -264,7 +271,7 @@ export default {
         .then(response => {
           this.cellsToGo = response.data
           if (this.cellsToGo.length != 0) {
-            this.turn_status = 2
+            this.turnStatus = 2
             this.clickedHoriz = horiz
             this.clickedVertic = vertic
           }
@@ -302,19 +309,21 @@ export default {
     },
     setHighlightColor() {
       //Очищаем классы
-      for (let index = 0; index <= this.highlightClasses.length; index++) {
+      for (let index = 0; index < this.highlightClasses.length; index++) {
         this.highlightClasses[index] = "not-highlighted-field"
       }
 
+      console.log(this.cellsToGo.length)
+      
       //Закрашиваем нужные
       let highlight_id = 0
 
       for (let index = 0; index < this.cellsToGo.length; index++) {
-
         highlight_id = ((this.cellsToGo[index].vertic - 1) * 8 + this.cellsToGo[index].horiz)
 
         this.highlightClasses[highlight_id] = "highlighted-field"
       }
+
     },
 
     initCheckerClass() {
@@ -328,7 +337,6 @@ export default {
       for (let index = 0; index < this.checkerClasses.length; index++) {
         this.checkerClasses[index] = "null-piece"
       }
-      console.log(this.checkers)
 
       //Изменяем нужные
       let checker_id = 0
@@ -341,28 +349,23 @@ export default {
             this.checkerClasses[checker_id] = `queen-${this.checkers[index].color}-piece`
             continue
           }
-          //console.log(`${this.checkers[checker_id].color}-piece`)
 
           this.checkerClasses[checker_id] = `${this.checkers[index].color}-piece`
             continue
         } catch(error) { console.log(error) }
       }
-      console.log(this.checkerClasses)
-    },
-    isWhite() {
-      if (this.color != "white")
-        return "desk-rotate"
     }
 
   },
   beforeMount(){
+
+    //Получаем информацию об игровом процессе
+    this.getGameInfo()
+
     //Инициализация доски
     this.setCellColor()
     this.initHighlightColor()
     this.initCheckerClass()
-
-    //Получаем информацию об игровом процессе
-    this.getGameInfo()
 
     //Обновляем шашки на доске
     this.updateField()
@@ -372,7 +375,7 @@ export default {
         this.updateField()
     }, 5000)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.fieldTimer)
   },
 watch: {
@@ -384,6 +387,14 @@ watch: {
 </script>
 
 <style lang="scss" scoped>
+.rotate_white {
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+  transform: rotate(0deg)
+}
+.rotate_black {
+  box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.25);
+  transform: rotate(180deg)
+}
 @media screen and (max-width: 1120px) {
   .number {
     font-size: 18px;
@@ -507,7 +518,6 @@ watch: {
   .full-desk {
     background-color: #fff;
     border: 1px solid #000000;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
     border-radius: 11px;
     display: flex;
     justify-content: space-evenly;

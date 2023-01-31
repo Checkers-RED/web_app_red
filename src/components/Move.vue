@@ -86,7 +86,7 @@ export default {
       this.GetMoves()
     }, 5000)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.timer)
   }
 }

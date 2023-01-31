@@ -47,7 +47,7 @@ export default {
       this.checkIsInMatch()
     }, 5000)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.timer)
   }
   
