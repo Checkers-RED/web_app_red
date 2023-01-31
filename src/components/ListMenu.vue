@@ -14,11 +14,13 @@
       </button>
       <div class="panel" v-show="isVisible[0]">
         <SelectVariant ref="rankedGameVariant" />
-        <button @click="enterTheQueue();">
-            <span v-show="!inRankedQueue">Начать поиск</span>
-            <span v-show="inRankedQueue">Остановить поиск </span>
-        </button> 
-        <span v-show="inRankedQueue"><sync-outlined spin/></span>
+        <div class="btn">
+          <button @click="enterTheQueue();">
+              <span v-show="!inRankedQueue">Начать поиск</span>
+              <span v-show="inRankedQueue">Остановить поиск </span>
+          </button> 
+          <span v-show="inRankedQueue"><sync-outlined spin/></span>
+        </div>
       </div>
       <!--<button class="menu-item" @click="joinTournament">
         <div class="tournament"></div>
@@ -137,7 +139,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1120px) {
   .menu {
     width: 100%;
     min-width: 380px;
@@ -203,7 +205,7 @@ export default defineComponent({
       border-radius: 11px;
   }
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1120px) {
   .menu {
     width: 500px;
     height: 700px;    
@@ -288,9 +290,8 @@ export default defineComponent({
   .panel button {
     height: 45px;
     background-color: #e6e6e6;
-    border: none;
+    border: 1px solid #E0E0E0;
     border-radius: 11px;
-    margin-top: 20px;
     padding: 0px 15px;
     line-height: 24px
   }
@@ -309,13 +310,17 @@ export default defineComponent({
     font-weight: 400;
     line-height: 24px;
   }
+  .btn {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
   .time {
     display: flex;
     align-items: center;
   }
   .time button{
     margin-left: auto;
-    margin-top: 0px;
   }
   .time input {
     height: 45px;

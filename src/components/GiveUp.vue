@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1120px) {
   .giveup {
     border-radius: 0 50% 50% 0;    
     width: 45px;
@@ -54,7 +54,7 @@ export default {
     line-height: 24px;
   }
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1120px) {
   .giveup {
     border-radius: 50%;    
     width: 45px;

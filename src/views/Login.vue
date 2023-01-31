@@ -168,7 +168,7 @@ export default {
     border-radius: 0px 11px 11px 0px;
   }
   
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1120px) {
   .container {
     width: 500px;
   }
@@ -176,7 +176,7 @@ export default {
     display: none;
   }
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1120px) {
   .container {
     width: 95%;
   }

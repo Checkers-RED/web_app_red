@@ -64,7 +64,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1120px) {
   button {
     border-radius: 0 50% 50% 0;    
     width: 45px;
@@ -73,7 +73,7 @@ export default defineComponent({
     font-size: 18px;
   }
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1120px) {
   button {
     border-radius: 50%;    
     width: 45px;

@@ -384,7 +384,7 @@ watch: {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1120px) {
   .number {
     font-size: 18px;
     height: 200%;
@@ -435,7 +435,7 @@ watch: {
     height: 35px;
   }
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1120px) {
   .number {
     font-size: 20px;
     height: 109%;

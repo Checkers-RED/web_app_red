@@ -141,7 +141,7 @@
 </script>
 
 <style lang="scss" scoped>  
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1120px) {
   .container {
     width: 500px;
   }
@@ -149,7 +149,7 @@
     display: none;
   }
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1120px) {
   .container {
     width: 95%;
   }

@@ -211,7 +211,7 @@
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1120px) {
   .friends {
     width: 100%;    
     margin-bottom: 25px;
@@ -246,7 +246,7 @@
     display: none;
   }
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1120px) {
   .friends {
     width: 500px;
     height: 340px;

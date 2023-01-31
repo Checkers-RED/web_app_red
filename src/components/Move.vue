@@ -94,7 +94,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1120px) {
   .move {
     width: 100%;
     min-width: 380px;
@@ -112,7 +112,7 @@ export default {
     font-size: 18px;
   }
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1120px) {
   .move {
     width: 500px;
     height: 700px;
