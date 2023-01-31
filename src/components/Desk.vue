@@ -395,7 +395,7 @@ watch: {
   box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.25);
   transform: rotate(180deg)
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1120px) {
   .number {
     font-size: 18px;
     height: 200%;
@@ -446,7 +446,7 @@ watch: {
     height: 35px;
   }
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1120px) {
   .number {
     font-size: 20px;
     height: 109%;

@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1120px) {
   .nickname {
     width: 44%;  
   }
@@ -60,7 +60,7 @@ export default {
   font-size: 18px;
   }
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1120px) {
   .nickname {
     width: 35%;  
   }

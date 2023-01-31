@@ -90,7 +90,7 @@ export default {
     margin-left: 60px;
   }
 
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: 1120px) {
     .row {
       display: flex;
       flex-direction: column;
