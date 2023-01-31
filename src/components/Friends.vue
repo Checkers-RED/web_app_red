@@ -146,7 +146,7 @@
 
     addFriend(id) {
       let current_session = Cookies.get('current_session')
-      let payload = {"cur_session": current_session, "f_id": id}
+      let payload = {"current_session": current_session, "f_id": id}
       
       HTTP.post(`/AddFriend`, payload)
         .then(response => {

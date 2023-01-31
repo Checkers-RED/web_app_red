@@ -18,7 +18,7 @@
             <span v-show="!inRankedQueue">Начать поиск</span>
             <span v-show="inRankedQueue">Остановить поиск </span>
         </button> 
-        <span v-show="inRankedQueue"><sync-outlined spin/></span>
+        <span style="padding-left: 15px;" v-show="inRankedQueue"><sync-outlined spin/></span>
       </div>
       <!--<button class="menu-item" @click="joinTournament">
         <div class="tournament"></div>
@@ -123,10 +123,9 @@ export default defineComponent({
 
       let payload = {"current_session": current_session }
 
-      HTTP.post(`/IsInMatch`, payload)
+      HTTP.post(`/IsInRankedMatch`, payload)
         .then(response => {
-          this.inRankedQueue = response.status
-
+          this.inRankedQueue = response.data.status
         })
     }
   },
