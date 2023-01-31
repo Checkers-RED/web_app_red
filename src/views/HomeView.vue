@@ -44,6 +44,7 @@ export default {
     },
     checkIsLoggedIn() {
       let current_session = Cookies.get('current_session')
+      let payload = {"current_session": current_session}
       
       if (current_session === undefined)
         this.$router.push('/login')
@@ -52,6 +53,9 @@ export default {
         this.$router.push('/login')
         
       HTTP.post(`/UserScore`, payload)
+        .then(response => {
+
+        })
         .catch(error => {
           this.$router.push('/login');
         })
