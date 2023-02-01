@@ -1,5 +1,5 @@
 <template>
-  <h1>Ваш ход</h1>
+  <h1>{{ whose_turn }}</h1>
   <div class="full-desk" :class="`rotate_${color}`">
     <div class="letters" style="transform: rotate(180deg)">
       <p v-for="Cell in horizCellsNames.slice().reverse()">{{ Cell }}</p>
@@ -21,7 +21,7 @@
         </table>
         <table>
           <tr class="tr-dynamic" v-for="Cell_v in vertCells">
-            <div v-for="Cell_h in horizCells" :id="`checker-`+(vertCells.length * horizCells.length - Cell_v * 8 + Cell_h)" @click="getCheckerClick" :class="checkerClasses[vertCells.length * horizCells.length - Cell_v * 8 + Cell_h]">
+            <div v-for="Cell_h in horizCells" :id="`checker-`+(vertCells.length * horizCells.length - Cell_v * 8 + Cell_h)" :ref="`checker-`+(vertCells.length * horizCells.length - Cell_v * 8 + Cell_h)" @click="getCheckerClick" :class="checkerClasses[vertCells.length * horizCells.length - Cell_v * 8 + Cell_h]">
             </div>
           </tr>
         </table>
@@ -49,6 +49,8 @@ export default {
       checkers: 
       {
       },
+
+      whose_turn: "Ваш ход",
 
       //Таймер для фоновых событий
       fieldTimer: null,
@@ -130,7 +132,28 @@ export default {
         .then(response => {
           this.queenIDs = []
           this.checkers = response.data
+          this.set_turn_color()
           this.setCheckerClass()
+        })
+    },
+
+    set_turn_color() {
+      //Обновление всего поля
+
+      let current_session = Cookies.get('current_session')
+
+      let payload = {"current_session": current_session }
+
+      HTTP.post(`/GetActiveColor`, payload)
+        .then(response => {
+          this.activeColor = response.data.active_color
+
+          if (this.activeColor == this.color) {
+            this.whose_turn = "Ваш ход"
+          }
+          else {
+            this.whose_turn = "Ход оппонента"
+          }
         })
     },
 
@@ -143,7 +166,7 @@ export default {
 
         let payload = {"current_session": current_session }
 
-        HTTP.post(`/${this.gameType}_turn_begin`, payload)
+        HTTP_game.post(`/${this.gameType}_turn_begin`, payload)
           .then(response => {
 
           })
@@ -154,20 +177,40 @@ export default {
 
       let id = event.currentTarget.id
 
+      //Определяем, чей ход. Если ход не текущего игрока, то возврат
+      if (this.color != this.activeColor) {
+        return
+      }
+
+      //Определяем, чья шашка нажата. Если нажата шашка оппонента и текущий статус игры -
+      // проверка возможных ходов, то возврат
+      let checker_class = this.$refs[id][0].className.split("-")[0]
+      if (checker_class != this.color && this.turnStatus == 0) {
+        return
+      }
+
       id = parseInt(id.split('-')[1])
 
-      let check_id = this.queenIDs.find(o => o == id)
+      //Определяем, что шашка является дамкой
+      let check_id = undefined
+      //Если этап не проверки возможности хода, то определяем по предыдущему клику класс шашки
+      if (this.turnStatus != 0) {
+        check_id = this.queenIDs.find(o => o == (this.clickedHoriz - 1) * 8 + this.clickedVertic)
+      }
+      //Если этап проверки возможности хода, то определяем по текущему клику класс шашки
+      else {
+        check_id = this.queenIDs.find(o => o == id)
+      }
+      console.log(check_id)
       let isQueen = false
-      
-      if (id == check_id) {
+      if (check_id != undefined) {
         isQueen = true
       }
 
-      const horiz = 8 - ((64 - id) % 8);
-      const vertic = 8 - Math.floor((64 - id) / 8);
-
-      console.log(`${horiz} ${vertic}`)
-
+      //Определяем координаты нажатия
+      let horiz = 8 - Math.floor((64 - id) / 8);
+      let vertic = 8 - ((64 - id) % 8);
+      
       let current_session = Cookies.get('current_session')
 
       //Если состояние не хода, то вызываем ручку, предоставляющую пользователю список ходов
@@ -183,13 +226,19 @@ export default {
         //Запрашиваем множество ходов у сервера
         HTTP_game.post(`/${this.gameType}_available_moves`, payload)
           .then(response => {
+            let buffer = -1;
             this.cellsToGo = response.data
+            this.cellsToGo.push({"horiz": horiz, "vertic": vertic})
             if (this.cellsToGo.length != 0) {
               this.turnStatus = 1
               this.clickedHoriz = horiz
               this.clickedVertic = vertic
               this.setHighlightColor()
             }
+          })
+          .catch(error => {
+            this.cellsToGo = []
+            this.setHighlightColor()
           })
 
         return
@@ -198,6 +247,7 @@ export default {
       //Если состояние хода, то вызываем пакет ручек, связанных с началом ходов игроков
       if (this.turnStatus == 1) {
         console.log("turn_status 1")
+        console.log(isQueen)
         let payload = { 
           "current_session": current_session, 
           "color": this.color, 
@@ -210,14 +260,19 @@ export default {
         //Делаем ход, сохраняем координаты последнего места хода
         HTTP_game.post(`/${this.gameType}_move`, payload)
           .then(response => {
-            this.cellsToGo = response.data
-            if (this.cellsToGo.length != 0) {
-              this.updateField()
-              this.afterMove(horiz, vertic)
-            }
+            this.clickedHoriz = response.data.horiz
+            this.clickedVertic = response.data.vertic
+            this.updateField()
+            this.cellsToGo = []
+            this.afterMove(this.clickedHoriz, this.clickedVertic, id)
+            this.setHighlightColor()
           })
           .catch(error => {
+            console.log(error)
             this.cellsToGo = []
+            this.clickedHoriz = -1
+            this.clickedVertic = -1
+            this.setHighlightColor()
             this.turnStatus = 0
           })
 
@@ -240,22 +295,38 @@ export default {
         //Делаем ход, сохраняем координаты последнего места хода
         HTTP_game.post(`/${this.gameType}_move`, payload)
           .then(response => {
-            this.cellsToGo = response.data
-            if (this.cellsToGo.length != 0) {
-              this.updateField()
-              this.afterMove(horiz, vertic)
-            }
+            this.clickedHoriz = response.data.horiz
+            this.clickedVertic = response.data.vertic
+            this.updateField()
+            this.cellsToGo = []
+            this.afterMove(this.clickedHoriz, this.clickedVertic, id)
+            this.setHighlightColor()
           })
           .catch(error => {
-            
+            console.log(error)
+            this.setHighlightColor()
           })
 
         return
       }
     },
 
-    afterMove(horiz, vertic) {
-      //Требуется залить ячейки
+    afterMove(horiz, vertic, id) {
+      console.log("THERE")
+
+      //Определяем, что шашка является дамкой
+      let check_id = -1
+      //Если этап не проверки возможности хода, то определяем по предыдущему клику класс шашки
+      if (this.turnStatus != 0) {
+        check_id = this.queenIDs.find(o => o == (this.clickedHoriz - 1) * 8 + this.clickedVertic)
+      }
+      //Если этап проверки возможности хода, то определяем по текущему клику класс шашки
+      else
+        check_id = this.queenIDs.find(o => o == id)
+      let isQueen = false
+      if (check_id != -1) {
+        isQueen = true
+      }
 
       let current_session = Cookies.get('current_session')
 
@@ -264,25 +335,28 @@ export default {
         "current_session": current_session, 
         "color": this.color, 
         "horiz": horiz, 
-        "vertic": vertic }
+        "vertic": vertic,
+        "isQueen": isQueen }
 
       //Запрашиваем множество ходов у сервера
       HTTP_game.post(`/${this.gameType}_after_move`, payload)
         .then(response => {
-          this.cellsToGo = response.data
-          if (this.cellsToGo.length != 0) {
-            this.turnStatus = 2
-            this.clickedHoriz = horiz
-            this.clickedVertic = vertic
-          }
-          else {
+          console.log("HERE")
+          console.log(response.data)
+          console.log(response.data == "OK")
+
+          if (response.data == "OK") {
+            this.cellsToGo = []
             this.turnStatus = 0
             this.clickedHoriz = -1
             this.clickedVertic = -1
+            return
           }
-        })
-        .catch(error => {
-          
+
+          console.log(`WHERE? ${response.data}`)
+          this.cellsToGo = response.data
+          this.cellsToGo.push({"horiz": horiz, "vertic": vertic})
+          this.turnStatus = 2
         })
     },
 
@@ -312,15 +386,12 @@ export default {
       for (let index = 0; index < this.highlightClasses.length; index++) {
         this.highlightClasses[index] = "not-highlighted-field"
       }
-
-      console.log(this.cellsToGo.length)
       
       //Закрашиваем нужные
       let highlight_id = 0
 
       for (let index = 0; index < this.cellsToGo.length; index++) {
-        highlight_id = ((this.cellsToGo[index].vertic - 1) * 8 + this.cellsToGo[index].horiz)
-
+        highlight_id = ((this.cellsToGo[index].horiz - 1) * 8 + this.cellsToGo[index].vertic)
         this.highlightClasses[highlight_id] = "highlighted-field"
       }
 
@@ -342,17 +413,18 @@ export default {
       let checker_id = 0
 
       for (let index = 0; index < this.checkers.length; index++) {
-        checker_id = (this.checkers[index].vertic - 1) * 8 + this.checkers[index].horiz
+        checker_id = (this.checkers[index].horiz - 1) * 8 + this.checkers[index].vertic
 
         try {
           if (this.checkers[index].isQueen == true) {
-            this.checkerClasses[checker_id] = `queen-${this.checkers[index].color}-piece`
+            this.queenIDs.push(checker_id)
+            this.checkerClasses[checker_id] = `${this.checkers[index].color}-queen-piece`
             continue
           }
 
           this.checkerClasses[checker_id] = `${this.checkers[index].color}-piece`
             continue
-        } catch(error) { console.log(error) }
+        } catch(error) { }
       }
     }
 
@@ -398,11 +470,11 @@ watch: {
 @media screen and (max-width: 1120px) {
   .number {
     font-size: 18px;
-    height: 200%;
+    height: 320px;
   }
   .letters {
     font-size: 18px;
-    width: 95%;
+    width: 310px;
   }
   .full-desk {
     width: 100%;
@@ -437,11 +509,11 @@ watch: {
     width: 35px;
     height: 35px;
   }
-  .queen-white-piece {
+  .white-queen-piece {
     width: 35px;
     height: 35px;
   }
-  .queen-black-piece {
+  .black-queen-piece {
     width: 35px;
     height: 35px;
   }
@@ -449,11 +521,11 @@ watch: {
 @media screen and (min-width: 1120px) {
   .number {
     font-size: 20px;
-    height: 109%;
+    height: 580px;
   }
   .letters {
     font-size: 20px;
-    width: 100%;
+    width: 573px;
   }
   .full-desk {
     width: 700px;
@@ -486,11 +558,11 @@ watch: {
     width: 60px;
     height: 60px;
   }
-  .queen-white-piece {
+  .white-queen-piece {
     width: 60px;
     height: 60px;
   }
-  .queen-black-piece {
+  .black-queen-piece {
     width: 60px;
     height: 60px;
   }
@@ -501,7 +573,7 @@ watch: {
   .number {
     display: flex;
     position: relative;
-    justify-content: space-evenly;
+    justify-content: space-between;
     flex-direction: column;
     font-weight: 400;
     line-height: 24px;
@@ -509,9 +581,9 @@ watch: {
   .letters {
     display: flex;
     position: relative;
-    justify-content: space-evenly;
+    justify-content: space-between;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 20px;
   }
 
 
@@ -604,14 +676,14 @@ watch: {
     margin: auto;
     cursor: pointer;
   }
-  .queen-white-piece {
+  .white-queen-piece {
   background-color: red;
   border: 1px solid #000000;
   border-radius: 50%;
   margin: auto;
   cursor: pointer;
   }
-  .queen-black-piece {
+  .black-queen-piece {
   background-color: purple;
   border: 1px solid #000000;
   border-radius: 50%;
