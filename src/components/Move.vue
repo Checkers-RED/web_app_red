@@ -143,6 +143,7 @@ export default {
     padding: 0;
     margin: 0;
     overflow-y: auto;
+    height: 100%;
 
   }
   ::-webkit-scrollbar {
@@ -167,23 +168,23 @@ export default {
     border-bottom: 1px solid #E0E0E0;
   }
   .opponent {
-    height: 75px;   
-    position: absolute;
-    bottom: 75px;       
+    min-height: 75px;
+    position: relative;
     border-top: 1px solid #E0E0E0;
     padding: 15px;
     font-weight: 400;
     line-height: 24px;
+    background-color: #FFFFFF;
     display: flex;
   }
   .nickname {
-    height: 75px;   
-    position: absolute;
-    bottom: 0;       
+    min-height: 75px;
+    position: relative;
     border-top: 1px solid #E0E0E0;
     padding: 15px;
     font-weight: 400;
     line-height: 24px;
+    background-color: #FFFFFF;
     display: flex;
   }
 </style>
