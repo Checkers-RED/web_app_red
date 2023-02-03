@@ -57,11 +57,11 @@ export default {
 <style lang="scss">
 @media screen and (min-width: 1120px) {
   .row {    
-    display: flex;    
+    display: flex;  
+    justify-content: space-evenly;  
   }
   .col-1 {
     flex: 50%;
-    margin-left: 60px;
   }
   .col-2 {      
     flex: 50%;
