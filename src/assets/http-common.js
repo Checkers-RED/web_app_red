@@ -7,5 +7,5 @@ export const HTTP = axios.create({
 })
 
 export const HTTP_game=axios.create({
-  baseURL: `http://localhost:4040`,
+  baseURL: `http://85.143.223.149:4040`,
 })
